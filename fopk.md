@@ -23,23 +23,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Filter {
-        public List<String> apply(List<String> values, Predicate<String> predicate) {
-                ArrayList<String> output = new ArrayList<String>();
-                for (String string : values) {
-                        if (predicate.apply(string)) {
-                                output.add(string);
-                        }
-                }
-                return output;
+    public List<String> apply(List<String> values, Predicate<String> predicate) {
+        ArrayList<String> output = new ArrayList<String>();
+        for (String string : values) {
+            if (predicate.apply(string)) {
+                output.add(string);
+            }
         }
+        return output;
+    }
 
-        public interface Predicate<T> {
-                public boolean apply(T input);
-        }
+    public interface Predicate<T> {
+        public boolean apply(T input);
+    }
 }
 ~~~
 
 Esimerkki 2. C++
+
+~~~ {.cpp}
+#include <boost/function.hpp>
+#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+
+using namespace std;
+using namespace boost;
+
+bool exact(string& value, string expected)
+{
+    return value == expected;
+}
+
+const vector<string> filter(const vector<string>& values,
+                            function<bool(string)> predicate)
+{
+    vector<string> output;
+    BOOST_FOREACH (string value, values)
+    {
+        if (predicate(value))
+            output.push_back(value);
+    }
+    return output;
+}
+~~~
 
 Edelläolevassa esimerkissä työtettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
@@ -71,7 +97,7 @@ Koostamisessa funktion palautusarvot sopivat suoraan seuraavan funktion syöttee
 
 Javassa ja C++:ssa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja tuottavat saman tuloksen. Funktio-olioita voidaan antaa syötteeksi toisille funktio-olioille jolloin saadaan aikaan ns. korkean asteen funktioita.
 
-Muunnokset (Transformation)
+# Muunnokset (Transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
