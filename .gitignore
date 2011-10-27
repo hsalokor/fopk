@@ -1,0 +1,7 @@
+*.swp
+*.swo
+*.un~
+*.pyc
+.lock*
+cpp-example/build/
+cpp-example/.waf*
