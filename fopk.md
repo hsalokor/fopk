@@ -10,6 +10,10 @@ Soveltamalla muutamia funktionaalisen ohjelmoinnin käsitteitä voidaan prosedur
 
 # Funktionaaliset ohjelmointitekniikat
 
+Muutamia funktionaalisia ohjelmointitekniikoita voidaan hyödyntää myös proseduraalisissa ohjelmointikielissä. Seuraavissa kappaleissa esittelemme muutamia niistä, sekä esimerkkejä sekä Javalla että C++:lla.
+
+Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
+
 # Tilattomat funktiot (Stateless function)
 
 Mikään proseduraalisessa ohjelmoinnissa ei estä kirjoittamasta metodeita siten että ne eivät muokkaa omaa syötettään tai ohjelman muuta tilaa.
