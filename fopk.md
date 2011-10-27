@@ -67,7 +67,7 @@ const vector<string> filter(const vector<string>& values,
 }
 ~~~
 
-Edelläolevassa esimerkissä työtettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
+Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
 # Muuttumaton data (Immutable data)
 
