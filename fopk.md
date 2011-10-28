@@ -20,7 +20,7 @@ Mikään proseduraalisessa ohjelmoinnissa ei estä kirjoittamasta metodeita site
 
 Esimerkki 1. Java
 
-~~~ {.java}
+```java
 package functional.java;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class Filter {
         public boolean apply(T input);
     }
 }
-~~~
+```
 
 Esimerkki 2. C++
 
@@ -111,7 +111,9 @@ public class Address implements ContactInformation {
 		return postOffice;
 	}
 }
+~~~
 
+~~~ {.java}
 package functional.java;
 
 public class AddressBuilder {
@@ -143,6 +145,7 @@ public class AddressBuilder {
 Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
 Esimerkki edustaja
+
 ~~~ {.java}
 package functional.java;
 
@@ -174,7 +177,9 @@ public interface ContactInformation extends Serializable {
 		}
 	}
 }
+~~~
 
+~~~ {.java}
 package functional.java;
 
 import java.sql.ResultSet;
@@ -227,6 +232,7 @@ public class DbAddress implements ContactInformation {
 		}
 	}
 }
+~~~
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
