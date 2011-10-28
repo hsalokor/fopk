@@ -18,7 +18,7 @@ Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan r
 
 Mikään proseduraalisessa ohjelmoinnissa ei estä kirjoittamasta metodeita siten että ne eivät muokkaa omaa syötettään tai ohjelman muuta tilaa.
 
-Esimerkki 1. Java
+*Esimerkki Javalla*
 
 ```java
 package functional.java;
@@ -43,7 +43,7 @@ public class Filter {
 }
 ```
 
-Esimerkki 2. C++
+*Esimerkki C++:lla*
 
 ```cpp
 #include <boost/function.hpp>
@@ -81,7 +81,7 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
-Esimerkki data ja rakentaja
+*Esimerkki data*
 
 ```java
 package functional.java;
@@ -114,6 +114,8 @@ public class Address implements ContactInformation {
 }
 ```
 
+*Esimerkki rakentaja*
+
 ```java
 package functional.java;
 
@@ -145,7 +147,7 @@ public class AddressBuilder {
 
 Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
-Esimerkki edustaja
+*Esimerkki edustajan rajapinta*
 
 ```java
 package functional.java;
@@ -179,6 +181,8 @@ public interface ContactInformation extends Serializable {
 	}
 }
 ```
+
+*Esimerkki edustaja*
 
 ```java
 package functional.java;
@@ -243,7 +247,7 @@ Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, k
 
 C++:ssa ei ole muuttumattomia tietorakenteita, mutta const-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen.
 
-Esimerkki C++:lla
+*Esimerkki C++:lla*
 
 ### Koostaminen (Composition)
 
