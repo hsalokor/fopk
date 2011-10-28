@@ -82,7 +82,7 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
 Esimerkki data ja rakentaja
-~~~{.java}
+~~~ {.java}
 package functional.java;
 
 public class Address implements ContactInformation {
@@ -143,7 +143,7 @@ public class AddressBuilder {
 Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
 Esimerkki edustaja
-~~~{.java}
+~~~ {.java}
 package functional.java;
 
 import java.io.Serializable;
