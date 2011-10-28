@@ -2,19 +2,19 @@
 
 Funktionaalisessa ohjelmoinnissa rakennetaan ohjelmisto siten että se koostuu tilattomista funktioista joiden tulos riippuu pelkästään syötteestä. Sen pohjana on lambda-kalkyyli ja matematiikasta tuttu funktion käsite. Erona proseduraaliseen ohjelmointiin on se että funktionaalisessa ohjelmoinnissa arvioidaan lausekkeita käskyjen antamisen sijaan. 
 
-# Funktionaalisen ohjelmoinnin edut
+## Funktionaalisen ohjelmoinnin edut
 
 Proseduulisessa ohjelmoinnissa mikä tahansa käsky voi muokata ohjelman tilaa, tätä kutsutaan sivuvaikutukseksi (side-effect). Ohjelmiston ymmärtämisen kannalta rajoittamattomat sivuvaikutukset ovat haitallisia. Esimerkiksi säikeisessä (multi-threaded) ohjelmistossa käsiteltävä tieto voi muuttua kesken proseduurien suoritusten, mikä voi johtaa vaikeasti selvitettäviin ongelmiin. Koska funktionaalisessa ohjelmoinnissa funktion paluuarvo riippuu vain syötteestä ja tieto on oletusarvoisesti muuttumatonta tämän tyyppisiä ongelmia ei esiinny.
 
 Soveltamalla muutamia funktionaalisen ohjelmoinnin käsitteitä voidaan proseduraalisten tai olio-pohjaisten ohjelmistojen rakennetta selkiyttää ja vähentää virheitä merkittävästi. Lisäksi ohjelmiston rinnakkaistaminen helpottuu, koska tietoa ei tarvitse lukita säikeiden välillä.
 
-# Funktionaaliset ohjelmointitekniikat
+## Funktionaaliset ohjelmointitekniikat
 
 Muutamia funktionaalisia ohjelmointitekniikoita voidaan hyödyntää myös proseduraalisissa ohjelmointikielissä. Seuraavissa kappaleissa esittelemme muutamia niistä, sekä esimerkkejä sekä Javalla että C++:lla.
 
 Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
 
-# Tilattomat funktiot (Stateless function)
+### Tilattomat funktiot (Stateless function)
 
 Mikään proseduraalisessa ohjelmoinnissa ei estä kirjoittamasta metodeita siten että ne eivät muokkaa omaa syötettään tai ohjelman muuta tilaa.
 
@@ -73,11 +73,11 @@ const vector<string> filter(const vector<string>& values,
 
 Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
-# Muuttumaton data (Immutable data)
+### Muuttumaton data (Immutable data)
 
 Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää datan suora muokkaaminen. Olio-kielissä tämä edellyttää sellaista olioiden tekemistä, jotka eivät anna muokata omia muuttujiaan.
 
-Javassa
+#### Javassa
 
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
@@ -89,22 +89,22 @@ Esimerkki edustaja
 
 Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi Googlen guava-kirjastoa.
 
-C++:ssa
+#### C++:ssa
 
 C++:ssa ei ole muuttumattomia tietorakenteita, mutta const-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen.
 
 Esimerkki C++:lla
 
-# Koostaminen (Composition)
+### Koostaminen (Composition)
 
 Koostamisessa funktion palautusarvot sopivat suoraan seuraavan funktion syötteeksi. Tällä tavalla funktiota voidaan helposti ketjuttaa toisiinsa, sekä niistä tulee lyhyitä ja helposti uudelleenkäytettäviä.
 
 Javassa ja C++:ssa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja tuottavat saman tuloksen. Funktio-olioita voidaan antaa syötteeksi toisille funktio-olioille jolloin saadaan aikaan ns. korkean asteen funktioita.
 
-# Muunnokset (Transformation)
+### Muunnokset (Transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
-# Yhteenveto
+## Yhteenveto
 
 Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta ja pieteettiä. Palkintona saadaan kuitenkin helpommin testattava ja paremmin muutoksia sietävä ohjelmisto.
