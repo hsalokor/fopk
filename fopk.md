@@ -82,12 +82,155 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
 Esimerkki data ja rakentaja
+~~~{.java}
+package functional.java;
+
+public class Address implements ContactInformation {
+	private final String streetAddress;
+	private final String postCode;
+	private final String postOffice;
+
+	public Address(String streetAddress, String postCode, String postOffice) {
+		this.streetAddress = streetAddress;
+		this.postCode = postCode;
+		this.postOffice = postOffice;
+	}
+
+	@Override
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	@Override
+	public String getPostCode() {
+		return postCode;
+	}
+
+	@Override
+	public String getPostOffice() {
+		return postOffice;
+	}
+}
+
+package functional.java;
+
+public class AddressBuilder {
+	private String buildStreetAddress;
+	private String buildPostCode;
+	private String buildPostOffice;
+
+	public AddressBuilder withAddress(String streetAddress) {
+		buildStreetAddress = streetAddress;
+		return this;
+	}
+
+	public AddressBuilder withPostCode(String postCode) {
+		buildPostCode = postCode;
+		return this;
+	}
+
+	public AddressBuilder withPostOffice(String postOffice) {
+		buildPostOffice = postOffice;
+		return this;
+	}
+
+	public Address build() {
+		return new Address(buildStreetAddress, buildPostCode, buildPostOffice);
+	}
+}
+~~~
 
 Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
 Esimerkki edustaja
+~~~{.java}
+package functional.java;
 
-Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi Googlen guava-kirjastoa.
+import java.io.Serializable;
+
+public interface ContactInformation extends Serializable {
+	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
+
+	String getStreetAddress();
+
+	String getPostCode();
+
+	String getPostOffice();
+
+	public static final class NoContactInformation implements ContactInformation {
+		@Override
+		public String getStreetAddress() {
+			return "";
+		}
+
+		@Override
+		public String getPostCode() {
+			return "";
+		}
+
+		@Override
+		public String getPostOffice() {
+			return "";
+		}
+	}
+}
+
+package functional.java;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.inject.Inject;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+
+public class DbAddress implements ContactInformation {
+	@Inject
+	private QueryRunner database;
+	private final Integer id;
+
+	public DbAddress(Integer id) {
+		this.id = id;
+	}
+
+	@Override
+	public String getStreetAddress() {
+		return fetchDbContactInfo("streetAddress");
+	}
+
+	@Override
+	public String getPostCode() {
+		return fetchDbContactInfo("postCode");
+	}
+
+	@Override
+	public String getPostOffice() {
+		return fetchDbContactInfo("postOffice");
+	}
+
+	private String fetchDbContactInfo(String fieldName) {
+		try {
+			return database.query("select " + fieldName + " from contactinfo where id = ?", new FirstStringHandler(), id);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static final class FirstStringHandler implements ResultSetHandler<String> {
+		@Override
+		public String handle(ResultSet rs) throws SQLException {
+			if (rs.next()) {
+				return rs.getString(0);
+			}
+			throw new SQLException("No result");
+		}
+	}
+}
+
+Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+
+Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
 
 #### C++:ssa
 
