@@ -45,7 +45,7 @@ public class Filter {
 
 Esimerkki 2. C++
 
-~~~ {.cpp}
+```cpp
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
@@ -69,7 +69,7 @@ const vector<string> filter(const vector<string>& values,
     }
     return output;
 }
-~~~
+```
 
 Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
@@ -82,7 +82,7 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
 Esimerkki data ja rakentaja
-~~~ {.java}
+```java
 package functional.java;
 
 public class Address implements ContactInformation {
@@ -111,9 +111,9 @@ public class Address implements ContactInformation {
 		return postOffice;
 	}
 }
-~~~
+```
 
-~~~ {.java}
+```java
 package functional.java;
 
 public class AddressBuilder {
@@ -140,13 +140,13 @@ public class AddressBuilder {
 		return new Address(buildStreetAddress, buildPostCode, buildPostOffice);
 	}
 }
-~~~
+```
 
 Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
 Esimerkki edustaja
 
-~~~ {.java}
+```java
 package functional.java;
 
 import java.io.Serializable;
@@ -177,9 +177,9 @@ public interface ContactInformation extends Serializable {
 		}
 	}
 }
-~~~
+```
 
-~~~ {.java}
+```java
 package functional.java;
 
 import java.sql.ResultSet;
@@ -232,7 +232,7 @@ public class DbAddress implements ContactInformation {
 		}
 	}
 }
-~~~
+```
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
