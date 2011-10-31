@@ -81,7 +81,7 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
-*Esimerkki data*
+*Esimerkki muuttumaton data*
 
 ```java
 package functional.java;
@@ -254,6 +254,120 @@ C++:ssa ei ole muuttumattomia tietorakenteita, mutta const-avainsanan käytöll�
 Koostamisessa funktion palautusarvot sopivat suoraan seuraavan funktion syötteeksi. Tällä tavalla funktiota voidaan helposti ketjuttaa toisiinsa, sekä niistä tulee lyhyitä ja helposti uudelleenkäytettäviä.
 
 Javassa ja C++:ssa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja tuottavat saman tuloksen. Funktio-olioita voidaan antaa syötteeksi toisille funktio-olioille jolloin saadaan aikaan ns. korkean asteen funktioita.
+
+#### Koostaminen Javalla
+
+Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http://code.google.com/p/guava-libraries/).
+
+```java
+package functional.java;
+
+public interface Function<F, T> {
+	public T apply(F input);
+}
+````
+
+Voimme helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen.
+
+```java
+package functional.java;
+
+import java.util.Map;
+
+import com.google.common.base.Function;
+import com.google.common.collect.MapMaker;
+
+public class CachingFunction<F, T> implements Function<F, T> {
+	private final Map<F, T> cache;
+
+	public CachingFunction(final Function<F, T> source) {
+		this.cache = new MapMaker().softValues().makeComputingMap(source);
+	}
+
+	@Override
+	public T apply(final F input) {
+		return cache.get(input);
+	}
+
+	public static <F, T> Function<F, T> cache(final Function<F, T> source) {
+		return new CachingFunction<F, T>(source);
+	}
+}
+```
+Muutetaanpa edellisen kappaleen esimerkin tietokanta haku funktioksi.
+
+Rajapinta
+
+```java
+package functional.java;
+
+public interface ContactInfoFetcher {
+	public String fetch(DbKey input);
+}
+```
+
+Toteutus
+
+```java
+package functional.java;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.inject.Inject;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+
+import com.google.common.base.Function;
+
+public class DbContactInfoFetcher implements ContactInfoFetcher, Function<DbKey, String> {
+	@Inject
+	private QueryRunner database;
+
+	@Override
+	public String fetch(DbKey input) {
+		return apply(input);
+	}
+
+	private static final class FirstStringHandler implements ResultSetHandler<String> {
+		@Override
+		public String handle(ResultSet rs) throws SQLException {
+			if (rs.next()) {
+				return rs.getString(0);
+			}
+			throw new SQLException("No result");
+		}
+	}
+
+	@Override
+	public String apply(DbKey input) {
+		try {
+			return database.query("select " + input.getFieldName() + " from contactinfo where id = ?", new FirstStringHandler(),
+				input.getId());
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}
+```
+
+Toteutus välimuistilla
+
+```java
+package functional.java;
+
+import com.google.common.base.Function;
+
+public class CachedContactInfoFetcher implements ContactInfoFetcher {
+	private final Function<DbKey, String> cache = CachingFunction.cache(new DbContactInfoFetcher());
+
+	@Override
+	public String fetch(DbKey input) {
+		return cache.apply(input);
+	}
+}
+```
 
 ### Muunnokset (Transformation)
 
