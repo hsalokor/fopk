@@ -294,9 +294,9 @@ public class CachingFunction<F, T> implements Function<F, T> {
 	}
 }
 ```
-Muutetaanpa edellisen kappaleen esimerkin tietokanta haku funktioksi.
+Muutetaanpa edellisen kappaleen esimerkin tietokantahaku funktioksi.
 
-Rajapinta
+*Rajapinta*
 
 ```java
 package functional.java;
@@ -306,7 +306,7 @@ public interface ContactInfoFetcher {
 }
 ```
 
-Toteutus
+*Toteutus*
 
 ```java
 package functional.java;
@@ -352,7 +352,7 @@ public class DbContactInfoFetcher implements ContactInfoFetcher, Function<DbKey,
 }
 ```
 
-Toteutus välimuistilla
+*Toteutus välimuistilla*
 
 ```java
 package functional.java;
