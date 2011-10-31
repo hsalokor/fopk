@@ -71,7 +71,7 @@ const vector<string> filter(const vector<string>& values,
 }
 ```
 
-Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
+Edelläolevassa esimerkissä syötettä ei suoraan muokata, vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
 ### Muuttumaton data (Immutable data)
 
@@ -241,7 +241,7 @@ public class DbAddress implements ContactInformation {
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
-Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
+Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
 
 #### C++:lla
 
