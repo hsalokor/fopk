@@ -16,7 +16,7 @@ Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan r
 
 ### Tilattomat funktiot (Stateless function)
 
-Mikään proseduraalisessa ohjelmoinnissa ei estä kirjoittamasta metodeita siten että ne eivät muokkaa omaa syötettään tai ohjelman muuta tilaa.
+Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten että ne eivät muokkaa omaa syötettään tai ohjelman tilaa.
 
 *Esimerkki Javalla*
 
@@ -77,9 +77,9 @@ Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palaut
 
 Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää datan suora muokkaaminen. Olio-kielissä tämä edellyttää sellaista olioiden tekemistä, jotka eivät anna muokata omia muuttujiaan.
 
-#### Javassa
+#### Javalla
 
-Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
+Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaa suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on  rakentaja-olio (Builder-pattern).
 
 *muuttumaton dataluokka*
 
@@ -243,7 +243,7 @@ Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INF
 
 Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
 
-#### C++:ssa
+#### C++:lla
 
 C++:ssa ei ole muuttumattomia tietorakenteita, mutta const-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen.
 
@@ -372,6 +372,87 @@ public class CachedContactInfoFetcher implements ContactInfoFetcher {
 ### Muunnokset (Transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
+
+#### Javalla
+
+*muuntajaluokka*
+
+```java
+package functional.java;
+
+import static functional.java.ContactInformation.NO_CONTACT_INFORMATION;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class AddressTransformer implements Function<String, ContactInformation> {
+	@Override
+	public ContactInformation apply(String input) {
+		final List<String> addressLines = addressLines(input);
+		try {
+			return new AddressBuilder().withAddress(firstItem(addressLines))
+				.withPostCode(firstItem(postCodeAndOffice(addressLines)))
+				.withPostOffice(secondItem(postCodeAndOffice(addressLines)))
+				.build();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return NO_CONTACT_INFORMATION;
+		}
+	}
+
+	private List<String> addressLines(String input) {
+		return Arrays.asList(input.split("\n"));
+	}
+
+	private List<String> postCodeAndOffice(final List<String> addressLines) {
+		return Arrays.asList(secondItem(addressLines).split(" "));
+	}
+
+	private String secondItem(final List<String> postCodeAndOffice) {
+		return postCodeAndOffice.get(1);
+	}
+
+	private String firstItem(final List<String> addressLines) {
+		return addressLines.get(0);
+	}
+}
+```
+
+*muuntajaluokan testi*
+
+```java
+package functional.java;
+
+import static functional.java.ContactInformation.NO_CONTACT_INFORMATION;
+import static junit.framework.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class AddressTransformerTest {
+	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
+	private final static String MISSING_CITY = "Testitie 5\n00999OLEMATON";
+	private final static String MISSING_SECOND_LINE = "FUBAR";
+
+	@Test
+	public void WithAddress() {
+		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
+		assertEquals("Testitie 5", address.getStreetAddress());
+		assertEquals("00999", address.getPostCode());
+		assertEquals("OLEMATON", address.getPostOffice());
+	}
+
+	@Test
+	public void WithMissingCity() {
+		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
+		assertEquals(NO_CONTACT_INFORMATION, address);
+	}
+
+	@Test
+	public void WithMissingSecondLine() {
+		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
+		assertEquals(NO_CONTACT_INFORMATION, address);
+	}
+}
+```
 
 ## Yhteenveto
 
