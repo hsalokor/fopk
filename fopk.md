@@ -385,7 +385,7 @@ Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta 
 
 #### Javalla
 
-Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Esimerkki käyttää myös hyväksi koostamista.
+Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta.
 
 *muuntajaluokka*
 
