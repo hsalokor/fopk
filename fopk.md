@@ -1,22 +1,22 @@
 # Funktionaalisempi ohjelmointi proseduraalisella kielellä
 
-Funktionaalisessa ohjelmoinnissa rakennetaan ohjelmisto siten että se koostuu tilattomista funktioista joiden tulos riippuu pelkästään syötteestä. Sen pohjana on lambda-kalkyyli ja matematiikasta tuttu funktion käsite. Erona proseduraaliseen ohjelmointiin on se että funktionaalisessa ohjelmoinnissa arvioidaan lausekkeita käskyjen antamisen sijaan. 
+Funktionaalisessa ohjelmoinnissa rakennetaan ohjelmisto siten, että se koostuu tilattomista funktioista, joiden tulos riippuu pelkästään syötteestä. Sen pohjana on lambda-kalkyyli ja matematiikasta tuttu funktion käsite. Erona proseduraaliseen ohjelmointiin on se, että funktionaalisessa ohjelmoinnissa arvioidaan lausekkeita käskyjen antamisen sijaan. 
 
 ## Funktionaalisen ohjelmoinnin edut
 
-Proseduulisessa ohjelmoinnissa mikä tahansa käsky voi muokata ohjelman tilaa, tätä kutsutaan sivuvaikutukseksi (side-effect). Ohjelmiston ymmärtämisen kannalta rajoittamattomat sivuvaikutukset ovat haitallisia. Esimerkiksi säikeisessä (multi-threaded) ohjelmistossa käsiteltävä tieto voi muuttua kesken proseduurien suoritusten, mikä voi johtaa vaikeasti selvitettäviin ongelmiin. Koska funktionaalisessa ohjelmoinnissa funktion paluuarvo riippuu vain syötteestä ja tieto on oletusarvoisesti muuttumatonta tämän tyyppisiä ongelmia ei esiinny.
+Proseduulisessa ohjelmoinnissa mikä tahansa käsky voi muokata ohjelman tilaa. Tätä kutsutaan sivuvaikutukseksi (side-effect). Ohjelmiston ymmärtämisen kannalta rajoittamattomat sivuvaikutukset ovat haitallisia. Esimerkiksi säikeisessä (multi-threaded) ohjelmistossa käsiteltävä tieto voi muuttua kesken proseduurien suoritusten, mikä voi johtaa vaikeasti selvitettäviin ongelmiin. Koska funktionaalisessa ohjelmoinnissa funktion paluuarvo riippuu vain syötteestä ja tieto on oletusarvoisesti muuttumatonta, tämän tyyppisiä ongelmia ei esiinny.
 
 Soveltamalla muutamia funktionaalisen ohjelmoinnin käsitteitä voidaan proseduraalisten tai olio-pohjaisten ohjelmistojen rakennetta selkiyttää ja vähentää virheitä merkittävästi. Lisäksi ohjelmiston rinnakkaistaminen helpottuu, koska tietoa ei tarvitse lukita säikeiden välillä.
 
 ## Funktionaaliset ohjelmointitekniikat
 
-Muutamia funktionaalisia ohjelmointitekniikoita voidaan hyödyntää myös proseduraalisissa ohjelmointikielissä. Seuraavissa kappaleissa esittelemme muutamia niistä, sekä esimerkkejä sekä Javalla että C++:lla.
+Muutamia funktionaalisia ohjelmointitekniikoita voidaan hyödyntää myös proseduraalisissa ohjelmointikielissä. Seuraavissa kappaleissa esittelemme muutamia niistä ja esimerkkejä sekä Javalla että C++:lla.
 
 Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
 
 ### Tilattomat funktiot (Stateless function)
 
-Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten että ne eivät muokkaa omaa syötettään tai ohjelman tilaa.
+Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa.
 
 *Esimerkki Javalla*
 
@@ -71,7 +71,7 @@ const vector<string> filter(const vector<string>& values,
 }
 ```
 
-Edelläolevassa esimerkissä syötettä ei suoraan muokata vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
+Edelläolevassa esimerkissä syötettä ei suoraan muokata, vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
 
 ### Muuttumaton data (Immutable data)
 
@@ -241,7 +241,7 @@ public class DbAddress implements ContactInformation {
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
-Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoa (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
+Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
 
 #### C++:lla
 
