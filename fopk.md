@@ -270,23 +270,29 @@ public interface Function<F, T> {
 Voimme helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen.
 
 ```java
-package functional.java;
+package functional.java.examples;
 
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import com.google.common.base.Function;
-import com.google.common.collect.MapMaker;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 
 public class CachingFunction<F, T> implements Function<F, T> {
-	private final Map<F, T> cache;
+	private final Cache<F, T> cache;
 
 	public CachingFunction(final Function<F, T> source) {
-		this.cache = new MapMaker().softValues().makeComputingMap(source);
+		cache = CacheBuilder.newBuilder().softValues().build(CacheLoader.from(source));
 	}
 
 	@Override
 	public T apply(final F input) {
-		return cache.get(input);
+		try {
+			return cache.get(input);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static <F, T> Function<F, T> cache(final Function<F, T> source) {
