@@ -358,7 +358,7 @@ public class DbContactInfoFetcher implements ContactInfoFetcher, Function<DbKey,
 }
 ```
 
-Nyt voimme toteuttaa ContactInfoFecther-rajapinnan siten, että se käyttää välimuistin hyödyksi.
+Nyt voimme toteuttaa ContactInfoFetcher-rajapinnan siten, että se käyttää välimuistin hyödyksi.
 
 *Toteutus välimuistilla*
 
