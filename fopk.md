@@ -481,6 +481,10 @@ public class AddressTransformerTest {
 }
 ```
 
+Guava kirjastossa on myös monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka]http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jolla voi muodostaa mm. komposiittifunktioita.
+
+#### C++:lla
+
 ## Yhteenveto
 
 Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta ja pieteettiä. Palkintona saadaan kuitenkin helpommin testattava ja paremmin muutoksia sietävä ohjelmisto.
