@@ -8,15 +8,18 @@ import java.util.List;
 public class AddressTransformer implements Function<String, ContactInformation> {
 	@Override
 	public ContactInformation apply(String input) {
-		final List<String> addressLines = addressLines(input);
 		try {
-			return new AddressBuilder().withAddress(firstItem(addressLines))
-				.withPostCode(firstItem(postCodeAndOffice(addressLines)))
-				.withPostOffice(secondItem(postCodeAndOffice(addressLines)))
-				.build();
+			return toAddress(addressLines(input));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return NO_CONTACT_INFORMATION;
 		}
+	}
+	
+	private Address toAddress(final List<String> addressLines) {
+		AddressBuilder addressBuilder = new AddressBuilder().withAddress(firstItem(addressLines));
+		addressBuilder.withPostCode(firstItem(postCodeAndOffice(addressLines)));
+		addressBuilder.withPostOffice(secondItem(postCodeAndOffice(addressLines)));
+		return addressBuilder.build();
 	}
 
 	private List<String> addressLines(String input) {
