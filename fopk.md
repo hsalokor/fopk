@@ -358,6 +358,8 @@ public class DbContactInfoFetcher implements ContactInfoFetcher, Function<DbKey,
 }
 ```
 
+Nyt voimme toteuttaa ContactInfoFecther-rajapinnan siten, että se käyttää välimuistin hyödyksi.
+
 *Toteutus välimuistilla*
 
 ```java
@@ -375,13 +377,15 @@ public class CachedContactInfoFetcher implements ContactInfoFetcher {
 }
 ```
 
+Guava kirjastossa on myös monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jolla voi mm. muodostaa koostefunktioita.
+
 ### Muunnokset (Transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
 #### Javalla
 
-Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta.
+Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Esimerkki käyttää myös hyväksi koostamista.
 
 *muuntajaluokka*
 
@@ -480,8 +484,6 @@ public class AddressTransformerTest {
 	}
 }
 ```
-
-Guava kirjastossa on myös monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jolla voi muodostaa mm. komposiittifunktioita.
 
 #### C++:lla
 
