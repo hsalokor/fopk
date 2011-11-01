@@ -3,3 +3,18 @@
 *.un~
 *.pyc
 .lock*
+
+# Eclipse project files
+.classpath
+.project
+.settings/org.eclipse.m2e.core.prefs
+*/.settings/org.eclipse.m2e.core.prefs
+*/.settings/org.eclipse.core.resources.prefs
+eclipse-output/
+eclipse-output-test/
+
+# Maven build directory
+target/
+
+# OS Specific files
+.DS_Store
