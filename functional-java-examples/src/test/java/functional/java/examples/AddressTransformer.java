@@ -16,7 +16,7 @@ public class AddressTransformer implements Function<String, ContactInformation> 
 	}
 	
 	private Address toAddress(final List<String> addressLines) {
-		AddressBuilder addressBuilder = new AddressBuilder().withAddress(firstItem(addressLines));
+		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(firstItem(addressLines));
 		addressBuilder.withPostCode(firstItem(postCodeAndOffice(addressLines)));
 		addressBuilder.withPostOffice(secondItem(postCodeAndOffice(addressLines)));
 		return addressBuilder.build();

@@ -5,7 +5,7 @@ public class AddressBuilder {
 	private String buildPostCode;
 	private String buildPostOffice;
 
-	public AddressBuilder withAddress(String streetAddress) {
+	public AddressBuilder withStreetAddress(String streetAddress) {
 		buildStreetAddress = streetAddress;
 		return this;
 	}
