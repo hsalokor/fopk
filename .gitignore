@@ -3,6 +3,7 @@
 *.un~
 *.pyc
 .lock*
+.waf*
 
 # Eclipse project files
 .classpath

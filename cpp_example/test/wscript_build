@@ -1,0 +1,13 @@
+#! /usr/bin/env python
+# encoding: utf-8
+def compile_tests(tests):
+    for t in tests:
+        test_name = str(t)
+        bld.program(features = 'cxx cxxprogram test',
+                    source   = test_name,
+                    target   = test_name.replace(".cpp", ""),
+                    lib      = ['gtest_main'],
+                    includes = ". .. ../src",
+                    use      = ['GMOCK', 'GTEST'])
+
+compile_tests(bld.path.ant_glob("*_test.cpp"))
