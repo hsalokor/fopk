@@ -9,17 +9,17 @@ using namespace boost;
 class ContainsMatcher
 {
 public:
-    ContainsMatcher(string expected) : m_expected(expected) {}
-    bool operator()(string value)
+    ContainsMatcher(const string& expected) : m_expected(expected) {}
+    bool operator()(const string& value) const
     {
         return value.find(m_expected) != string::npos;
     }
 private:
-    string m_expected;
+    const string m_expected;
 };
 
-const vector<string> filter(const vector<string>& values,
-                      function<bool(string)> predicate)
+vector<string> filter(const vector<string>& values,
+                      const function<bool(string)> predicate) const
 {
     vector<string> output;
     BOOST_FOREACH (string value, values)
@@ -30,12 +30,12 @@ const vector<string> filter(const vector<string>& values,
     return output;
 }
 
-bool exact(string& value, string expected)
+bool exact(const string& value, const string& expected) const
 {
     return value == expected;
 }
 
-bool contains(string& value, string expected)
+bool contains(const string& value, const string& expected) const
 {
     return value.find(expected) != string::npos;
 }
