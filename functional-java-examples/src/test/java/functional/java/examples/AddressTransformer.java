@@ -45,12 +45,12 @@ public class AddressTransformer implements Function<String, ContactInformation> 
 			return Arrays.asList(input.split(" "));
 		}
 	}
-
-	private static String second(final List<String> postCodeAndOffice) {
-		return postCodeAndOffice.get(1);
+	
+	private static String first(final List<String> list) {
+		return list.get(0);
 	}
 
-	private static String first(final List<String> addressLines) {
-		return addressLines.get(0);
+	private static String second(final List<String> list) {
+		return list.get(1);
 	}
 }
