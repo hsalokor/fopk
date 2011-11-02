@@ -53,13 +53,13 @@ public class Filter {
 using namespace std;
 using namespace boost;
 
-bool exact(string& value, string expected)
+bool exact(const string& value, const string& expected) const
 {
     return value == expected;
 }
 
-const vector<string> filter(const vector<string>& values,
-                            function<bool(string)> predicate)
+vector<string> filter(const vector<string>& values,
+                      const function<bool(string)>& predicate) const
 {
     vector<string> output;
     BOOST_FOREACH (string value, values)
@@ -245,9 +245,20 @@ Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, k
 
 #### C++:lla
 
-C++:ssa ei ole muuttumattomia tietorakenteita, mutta const-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen.
+C++:ssa ei ole muuttumattomia tietorakenteita, mutta *const*-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen. Const-asiasanaa voidaan käyttää arvon, osoittimen tai metodin yhteydessä. Const-määre arvon yhteydessä estää arvon muokkaamisen, kun taas osoittimen const-asiasana rajoittaa vain ja ainoastaan osoittimen muokkaamista. Metodin yhteydessä const-asiasana estää sekä luokan jäsenten muokkaamisen, että sellaisten metodien kutsumisen joissa ei ole const-määrettä.
 
 *Esimerkki C++:lla*
+
+```java
+class StringHolder
+{
+public:
+    const string& getValue() const { return this->value; }
+    void setValue(const string& value) { this->value = value; }
+private:
+    string value;
+}
+```
 
 ### Koostaminen (Composition)
 
