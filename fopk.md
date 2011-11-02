@@ -500,4 +500,8 @@ public class AddressTransformerTest {
 
 ## Yhteenveto
 
-Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta ja pieteettiä. Palkintona saadaan kuitenkin helpommin testattava ja paremmin muutoksia sietävä ohjelmisto.
+Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta. Erityisesti ulkoisia kirjastoja käytettäessä voi olla hankalaa ohjelmoida funktionaalisella tavalla. Halu lipsua muuttumattoman datan käytöstä tai muunnoksien tekemisestä saattaa joskus kasvaa aikataulupaineiden kerääntyessä. Funktionaalisella tiellä pysyminen kuitenkin kannattaa, sillä funktionaalisesti kirjoitettu koodi on helposti luettavampaa ja muokattavampaa kuin imperatiiviseen tapaan kirjoitettu. Myös pieniin osiin pilkkoutuvat funktiot helpottavat yksikkötestien tekemistä.
+
+Me allekirjoittaneet toivomme kaikille lukijoille mukavia funktionaalisia koodaushetkiä!
+
+*Tuomas Hakkarainen ja Harri Salokorpi*
