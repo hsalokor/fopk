@@ -145,102 +145,6 @@ public class AddressBuilder {
 }
 ```
 
-Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
-
-*edustajan rajapinta*
-
-```java
-package functional.java;
-
-import java.io.Serializable;
-
-public interface ContactInformation extends Serializable {
-	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
-
-	String getStreetAddress();
-
-	String getPostCode();
-
-	String getPostOffice();
-
-	public static final class NoContactInformation implements ContactInformation {
-		@Override
-		public String getStreetAddress() {
-			return "";
-		}
-
-		@Override
-		public String getPostCode() {
-			return "";
-		}
-
-		@Override
-		public String getPostOffice() {
-			return "";
-		}
-	}
-}
-```
-
-*edustaja*
-
-```java
-package functional.java;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.inject.Inject;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-
-public class DbAddress implements ContactInformation {
-	@Inject
-	private QueryRunner database;
-	private final Integer id;
-
-	public DbAddress(Integer id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getStreetAddress() {
-		return fetchDbContactInfo("streetAddress");
-	}
-
-	@Override
-	public String getPostCode() {
-		return fetchDbContactInfo("postCode");
-	}
-
-	@Override
-	public String getPostOffice() {
-		return fetchDbContactInfo("postOffice");
-	}
-
-	private String fetchDbContactInfo(String fieldName) {
-		try {
-			return database.query("select " + fieldName + " from contactinfo where id = ?", new FirstStringHandler(), id);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static final class FirstStringHandler implements ResultSetHandler<String> {
-		@Override
-		public String handle(ResultSet rs) throws SQLException {
-			if (rs.next()) {
-				return rs.getString(0);
-			}
-			throw new SQLException("No result");
-		}
-	}
-}
-```
-
-Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
-
 Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
 
 #### C++:lla
@@ -277,6 +181,108 @@ public interface Function<F, T> {
 	public T apply(F input);
 }
 ````
+
+#### Javalla
+
+Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta.
+
+*muuntajaluokka*
+
+```java
+package functional.java.examples;
+
+import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
+
+import java.util.Arrays;
+import java.util.List;
+
+import com.google.common.base.Function;
+
+public class AddressTransformer implements Function<String, ContactInformation> {
+	@Override
+	public ContactInformation apply(String input) {
+		try {
+			return toAddress(lines(input));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return NO_CONTACT_INFORMATION;
+		}
+	}
+	
+	private Address toAddress(final List<String> addressLines) {
+		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(first(addressLines));
+		addressBuilder.withPostCode(first(words(second(addressLines))));
+		addressBuilder.withPostOffice(second(words(second(addressLines))));
+		return addressBuilder.build();
+	}
+
+	private static List<String> lines(String input) {
+		return new Lines().apply(input);
+	}
+
+	private static class Lines implements Function<String, List<String>> {
+		@Override
+		public List<String> apply(String input) {
+			return Arrays.asList(input.split("\n"));
+		}
+	}
+	
+	private static List<String> words(final String input) {
+		return new Words().apply(input);
+	}
+
+	private static class Words implements Function<String, List<String>> {
+		@Override
+		public List<String> apply(String input) {
+			return Arrays.asList(input.split(" "));
+		}
+	}
+	
+	private static String first(final List<String> list) {
+		return list.get(0);
+	}
+
+	private static String second(final List<String> list) {
+		return list.get(1);
+	}
+}
+```
+
+*muuntajaluokan testi*
+
+```java
+package functional.java;
+
+import static functional.java.ContactInformation.NO_CONTACT_INFORMATION;
+import static junit.framework.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class AddressTransformerTest {
+	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
+	private final static String MISSING_CITY = "Testitie 5\n00999OLEMATON";
+	private final static String MISSING_SECOND_LINE = "FUBAR";
+
+	@Test
+	public void WithAddress() {
+		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
+		assertEquals("Testitie 5", address.getStreetAddress());
+		assertEquals("00999", address.getPostCode());
+		assertEquals("OLEMATON", address.getPostOffice());
+	}
+
+	@Test
+	public void WithMissingCity() {
+		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
+		assertEquals(NO_CONTACT_INFORMATION, address);
+	}
+
+	@Test
+	public void WithMissingSecondLine() {
+		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
+		assertEquals(NO_CONTACT_INFORMATION, address);
+	}
+}
+```
 
 Voimme helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen. Tämä välimuisti ei tallenna pelkästään avain-arvo -pareja, vaan myös funktion jolla uusi arvo tarpeen mukaan saadaan.
 
@@ -390,111 +396,106 @@ public class CachedContactInfoFetcher implements ContactInfoFetcher {
 
 Guava kirjastossa on myös monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jolla voi mm. muodostaa koostefunktioita.
 
-### Muunnokset (Transformation)
+### Tyyppimuunnokset (Type-transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
-#### Javalla
+Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
 
-Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta.
-
-*muuntajaluokka*
-
-```java
-package functional.java.examples;
-
-import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
-
-import java.util.Arrays;
-import java.util.List;
-
-import com.google.common.base.Function;
-
-public class AddressTransformer implements Function<String, ContactInformation> {
-	@Override
-	public ContactInformation apply(String input) {
-		try {
-			return toAddress(lines(input));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return NO_CONTACT_INFORMATION;
-		}
-	}
-	
-	private Address toAddress(final List<String> addressLines) {
-		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(first(addressLines));
-		addressBuilder.withPostCode(first(words(second(addressLines))));
-		addressBuilder.withPostOffice(second(words(second(addressLines))));
-		return addressBuilder.build();
-	}
-
-	private static List<String> lines(String input) {
-		return new Lines().apply(input);
-	}
-
-	private static class Lines implements Function<String, List<String>> {
-		@Override
-		public List<String> apply(String input) {
-			return Arrays.asList(input.split("\n"));
-		}
-	}
-	
-	private static List<String> words(final String input) {
-		return new Words().apply(input);
-	}
-
-	private static class Words implements Function<String, List<String>> {
-		@Override
-		public List<String> apply(String input) {
-			return Arrays.asList(input.split(" "));
-		}
-	}
-	
-	private static String first(final List<String> list) {
-		return list.get(0);
-	}
-
-	private static String second(final List<String> list) {
-		return list.get(1);
-	}
-}
-```
-
-*muuntajaluokan testi*
+*edustajan rajapinta*
 
 ```java
 package functional.java;
 
-import static functional.java.ContactInformation.NO_CONTACT_INFORMATION;
-import static junit.framework.Assert.assertEquals;
+import java.io.Serializable;
 
-import org.junit.Test;
+public interface ContactInformation extends Serializable {
+	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
-public class AddressTransformerTest {
-	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
-	private final static String MISSING_CITY = "Testitie 5\n00999OLEMATON";
-	private final static String MISSING_SECOND_LINE = "FUBAR";
+	String getStreetAddress();
 
-	@Test
-	public void WithAddress() {
-		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
-		assertEquals("Testitie 5", address.getStreetAddress());
-		assertEquals("00999", address.getPostCode());
-		assertEquals("OLEMATON", address.getPostOffice());
-	}
+	String getPostCode();
 
-	@Test
-	public void WithMissingCity() {
-		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
-		assertEquals(NO_CONTACT_INFORMATION, address);
-	}
+	String getPostOffice();
 
-	@Test
-	public void WithMissingSecondLine() {
-		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
-		assertEquals(NO_CONTACT_INFORMATION, address);
+	public static final class NoContactInformation implements ContactInformation {
+		@Override
+		public String getStreetAddress() {
+			return "";
+		}
+
+		@Override
+		public String getPostCode() {
+			return "";
+		}
+
+		@Override
+		public String getPostOffice() {
+			return "";
+		}
 	}
 }
 ```
+
+*edustaja*
+
+```java
+package functional.java;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.inject.Inject;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+
+public class DbAddress implements ContactInformation {
+	@Inject
+	private QueryRunner database;
+	private final Integer id;
+
+	public DbAddress(Integer id) {
+		this.id = id;
+	}
+
+	@Override
+	public String getStreetAddress() {
+		return fetchDbContactInfo("streetAddress");
+	}
+
+	@Override
+	public String getPostCode() {
+		return fetchDbContactInfo("postCode");
+	}
+
+	@Override
+	public String getPostOffice() {
+		return fetchDbContactInfo("postOffice");
+	}
+
+	private String fetchDbContactInfo(String fieldName) {
+		try {
+			return database.query("select " + fieldName + " from contactinfo where id = ?", new FirstStringHandler(), id);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static final class FirstStringHandler implements ResultSetHandler<String> {
+		@Override
+		public String handle(ResultSet rs) throws SQLException {
+			if (rs.next()) {
+				return rs.getString(0);
+			}
+			throw new SQLException("No result");
+		}
+	}
+}
+```
+
+Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+
 
 #### C++:lla
 
