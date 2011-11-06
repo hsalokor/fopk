@@ -5,9 +5,8 @@ def compile_tests(tests):
         test_name = str(t)
         bld.program(features = 'cxx cxxprogram test',
                     source   = test_name,
-                    target   = test_name.replace(".cpp", ""),
-                    lib      = ['gtest_main'],
-                    includes = ". .. ../src",
-                    use      = ['GMOCK', 'GTEST'])
+                    target   = test_name.replace(".cxx", ""),
+                    lib      = ['pthread', 'gtest', 'gtest_main'],
+                    includes = ". .. ../src")
 
-compile_tests(bld.path.ant_glob("*_test.cpp"))
+compile_tests(bld.path.ant_glob("*test.cxx"))

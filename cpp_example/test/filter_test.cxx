@@ -19,7 +19,7 @@ private:
 };
 
 vector<string> filter(const vector<string>& values,
-                      const function<bool(string)> predicate) const
+                      const function<bool(string)> predicate)
 {
     vector<string> output;
     BOOST_FOREACH (string value, values)
@@ -30,12 +30,12 @@ vector<string> filter(const vector<string>& values,
     return output;
 }
 
-bool exact(const string& value, const string& expected) const
+bool exact(const string& value, const string& expected)
 {
     return value == expected;
 }
 
-bool contains(const string& value, const string& expected) const
+bool contains(const string& value, const string& expected)
 {
     return value.find(expected) != string::npos;
 }

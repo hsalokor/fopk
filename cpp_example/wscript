@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # encoding: utf-8
 from waflib.Tools import waf_unit_test
+from colorize import summary
 
 top = '.'
 out = 'build'
@@ -10,56 +11,13 @@ def options(opt):
     opt.load('waf_unit_test')
 
 def configure_gtest(conf):
-    conf.check_cfg(path='gtest-config',
-                   args='--cppflags --libs',
-                   package='',
-                   uselib_store='GTEST')
-
-def configure_gmock(conf):
-    conf.check_cfg(path='gmock-config',
-                   args='--cppflags --libs',
-                   package='',
-                   uselib_store='GMOCK')
-
-def configure_curlpp(conf):
-    conf.check_cfg(path='pkg-config',
-                   args='--cflags --libs',
-                   package='curlpp',
-                   uselib_store='CURLPP')
+    conf.check(header_name="gtest/gtest.h")
 
 def configure(conf):
     conf.load('compiler_cxx')
     conf.load('waf_unit_test')
     configure_gtest(conf)
-    configure_gmock(conf)
-    configure_curlpp(conf)
     conf.env.INCPATHS = ['src']
-
-from waflib import Logs
-def print_lines(color, lines):
-    Logs.pprint(color, "\n".join(lines))
-    return [], color
-
-from re import match
-def colorize(code, out):
-    last_color = 'WHITE'
-    buf = []
-    for line in out.split("\n"):
-        buf.append(line)
-        if match("\[.*(OK|PASSED).*\]", line):
-            buf, last_color = print_lines('GREEN', buf)
-        elif match("\[.*FAILED.*\]", line):
-            buf, last_color = print_lines('RED', buf)
-        elif match("\[.*[-=]+.*\]", line):
-            buf, last_color = print_lines('GREEN', buf)
-
-    # Flush any pending items as green
-    buf = print_lines('GREEN', buf)
-
-def summary(bld):
-    lst = getattr(bld, 'utest_results', [])
-    for (f, code, out, err) in lst:
-        colorize(code, out)
 
 def build(bld):
     bld.recurse('src test')

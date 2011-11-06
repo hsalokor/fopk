@@ -8,14 +8,15 @@ using namespace boost;
 
 const vector<string> lines(const string& input)
 {
-
+    vector<string> lines;
+    return lines;
 }
 
 TEST(TransformerTest, testLines)
 {
-    const vector<string> lines = lines("line 1\nline 2");
-    EXPECT_EQ("line1", lines[0]);
-    EXPECT_EQ("line2", lines[1]);
+    const vector<string> l = lines("line 1\nline 2");
+    EXPECT_EQ("line1", l[0]);
+    EXPECT_EQ("line2", l[1]);
 }
 
 TEST(TransformerTest, testWords)
