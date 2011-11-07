@@ -11,7 +11,7 @@ public class AddressTransformerTest {
 	private final static String MISSING_SECOND_LINE = "FUBAR";
 
 	@Test
-	public void WithAddress() {
+	public void hasCorrectAddressFields() {
 		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
 		assertEquals("Testitie 5", address.getStreetAddress());
 		assertEquals("00999", address.getPostCode());
@@ -19,13 +19,13 @@ public class AddressTransformerTest {
 	}
 
 	@Test
-	public void WithMissingCity() {
+	public void hasNoContactInformationWithMissingCity() {
 		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
 		assertEquals(NO_CONTACT_INFORMATION, address);
 	}
 
 	@Test
-	public void WithMissingSecondLine() {
+	public void hasNoContactInformationWithMissingSecondLine() {
 		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
 		assertEquals(NO_CONTACT_INFORMATION, address);
 	}

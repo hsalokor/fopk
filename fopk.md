@@ -295,7 +295,7 @@ public interface Function<F, T> {
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
-Functions.compose:lla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. On mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
+Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply-metodia kutsutaan. Siten on mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
 
 *muuntajaluokka*
 
@@ -381,9 +381,9 @@ public class AddressTransformer implements Function<String, ContactInformation> 
 *muuntajaluokan testi*
 
 ```java
-package functional.java;
+package functional.java.examples;
 
-import static functional.java.ContactInformation.NO_CONTACT_INFORMATION;
+import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
 import static junit.framework.Assert.assertEquals;
 
 import org.junit.Test;
@@ -394,7 +394,7 @@ public class AddressTransformerTest {
 	private final static String MISSING_SECOND_LINE = "FUBAR";
 
 	@Test
-	public void WithAddress() {
+	public void hasCorrectAddressFields() {
 		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
 		assertEquals("Testitie 5", address.getStreetAddress());
 		assertEquals("00999", address.getPostCode());
@@ -402,13 +402,13 @@ public class AddressTransformerTest {
 	}
 
 	@Test
-	public void WithMissingCity() {
+	public void hasNoContactInformationWithMissingCity() {
 		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
 		assertEquals(NO_CONTACT_INFORMATION, address);
 	}
 
 	@Test
-	public void WithMissingSecondLine() {
+	public void hasNoContactInformationWithMissingSecondLine() {
 		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
 		assertEquals(NO_CONTACT_INFORMATION, address);
 	}
