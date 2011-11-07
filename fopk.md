@@ -93,18 +93,18 @@ public class FilterTest {
 	private static final class NoBeastsPredicate implements Predicate<String> {
 		@Override
 		public boolean apply(String input) {
-			return isNoBeasts(input);
+			return isNoBeast(input);
 		}
 	}
 
 	private final class NoBeastsCondition implements Condition<String> {
 		@Override
 		public boolean apply(String input) {
-			return isNoBeasts(input);
+			return isNoBeast(input);
 		}
 	}
 	
-	private static boolean isNoBeasts(String input) {
+	private static boolean isNoBeast(String input) {
 		for (String beast : BEASTS) {
 			if(input.equals(beast)) {
 				return false;
@@ -275,7 +275,7 @@ private:
 
 ### Koostaminen (Composition)
 
-Koostamisessa funktion palautusarvot sopivat suoraan seuraavan funktion syötteeksi. Tällä tavalla funktiota voidaan helposti ketjuttaa toisiinsa, sekä niistä tulee lyhyitä ja helposti uudelleenkäytettäviä.
+Koostamisessa funktion palautusarvot sopivat suoraan seuraavan funktion syötteeksi. Tällä tavalla funktioita voidaan helposti ketjuttaa toisiinsa, sekä niistä tulee lyhyitä ja helposti uudelleenkäytettäviä.
 
 Javassa ja C++:ssa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja tuottavat saman tuloksen. Funktio-olioita voidaan antaa syötteeksi toisille funktio-olioille jolloin saadaan aikaan ns. korkean asteen funktioita.
 
@@ -295,7 +295,7 @@ public interface Function<F, T> {
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
-Functions.compose:lla muodostettu koostofuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. On mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
+Functions.compose:lla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. On mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
 
 *muuntajaluokka*
 
@@ -411,40 +411,6 @@ public class AddressTransformerTest {
 	public void WithMissingSecondLine() {
 		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
 		assertEquals(NO_CONTACT_INFORMATION, address);
-	}
-}
-```
-
-Guava-kirjastolla helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen. Tämä välimuisti ei tallenna pelkästään avain-arvo -pareja, vaan myös funktion jolla uusi arvo tarpeen mukaan saadaan.
-
-```java
-package functional.java.examples;
-
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.base.Function;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-
-public class CachingFunction<F, T> implements Function<F, T> {
-	private final Cache<F, T> cache;
-
-	public CachingFunction(final Function<F, T> source) {
-		cache = CacheBuilder.newBuilder().softValues().build(CacheLoader.from(source));
-	}
-
-	@Override
-	public T apply(final F input) {
-		try {
-			return cache.get(input);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static <F, T> Function<F, T> cache(final Function<F, T> source) {
-		return new CachingFunction<F, T>(source);
 	}
 }
 ```
