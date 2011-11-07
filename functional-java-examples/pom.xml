@@ -24,12 +24,6 @@
 			<version>3.0</version>
 		</dependency>
 		<dependency>
-			<!-- dbutils is a handy database connection library -->
-			<groupId>commons-dbutils</groupId>
-			<artifactId>commons-dbutils</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
 			<!-- For tests -->
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

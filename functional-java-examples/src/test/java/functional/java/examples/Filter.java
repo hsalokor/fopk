@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Filter {
-	public List<String> apply(List<String> values, Predicate<String> predicate) {
+	public List<String> apply(List<String> values, Condition<String> predicate) {
 		ArrayList<String> output = new ArrayList<String>();
 		for (String string : values) {
 			if (predicate.apply(string)) {
@@ -14,7 +14,7 @@ public class Filter {
 		return output;
 	}
 
-	public interface Predicate<T> {
+	public interface Condition<T> {
 		public boolean apply(T input);
 	}
 }

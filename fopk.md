@@ -16,34 +16,106 @@ Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan r
 
 ### Tilattomat funktiot (Stateless function)
 
-Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa.
+Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa. Funktiota käytettäessä on tärkeää välttää null-arvojen palauttamista, sillä tällöin funktioketjun suorittaminen päättyy poikkeukseen.
 
-*Esimerkki Javalla*
+#### Javalla
+
+Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan palautetaan uusi lista joka täyttä ehdon. 
+
+*Suodin*
 
 ```java
-package functional.java;
+package functional.java.examples;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Filter {
-    public List<String> apply(List<String> values, Predicate<String> predicate) {
-        ArrayList<String> output = new ArrayList<String>();
-        for (String string : values) {
-            if (predicate.apply(string)) {
-                output.add(string);
-            }
-        }
-        return output;
-    }
+	public List<String> apply(List<String> values, Condition<String> predicate) {
+		ArrayList<String> output = new ArrayList<String>();
+		for (String string : values) {
+			if (predicate.apply(string)) {
+				output.add(string);
+			}
+		}
+		return output;
+	}
 
-    public interface Predicate<T> {
-        public boolean apply(T input);
-    }
+	public interface Condition<T> {
+		public boolean apply(T input);
+	}
 }
 ```
 
-*Esimerkki C++:lla*
+Seuraavaksi suotimen testi ja esimerkki suotimen käytöstä [Googlen guava-kirjastolla](http://code.google.com/p/guava-libraries/).
+
+*Suotimen testi*
+
+````java
+package functional.java.examples;
+
+import static com.google.common.collect.Iterables.filter;
+import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertFalse;
+
+import java.util.List;
+
+import org.junit.Test;
+
+import com.google.common.base.Predicate;
+
+import functional.java.examples.Filter.Condition;
+
+public class FilterTest {
+	private static final List<String> PETS = asList("cat", "dog", "bunny", "tiger");
+	private static final List<String> BEASTS = asList("tiger", "lion", "rhino", "bear");
+
+	@Test
+	public void filterBeasts() {
+		List<String> petsWithoutBeasts = new Filter().apply(PETS, new NoBeastsCondition());
+		assertNoBeasts(petsWithoutBeasts);
+	}
+	
+	@Test
+	public void filterBeastsWithGuava() {
+		Iterable<String> petsWithoutBeasts = filter(PETS, new NoBeastsPredicate());
+		assertNoBeasts(petsWithoutBeasts);
+	}
+	
+	private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
+		for (String pet : petsWithoutBeasts) {
+			for (String beast : BEASTS) {
+				assertFalse(pet.equals(beast));
+			}
+		}
+	}
+
+	private static final class NoBeastsPredicate implements Predicate<String> {
+		@Override
+		public boolean apply(String input) {
+			return isNoBeasts(input);
+		}
+	}
+
+	private final class NoBeastsCondition implements Condition<String> {
+		@Override
+		public boolean apply(String input) {
+			return isNoBeasts(input);
+		}
+	}
+	
+	private static boolean isNoBeasts(String input) {
+		for (String beast : BEASTS) {
+			if(input.equals(beast)) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+````
+
+#### C++:lla
 
 ```cpp
 #include <boost/function.hpp>
@@ -71,8 +143,6 @@ vector<string> filter(const vector<string>& values,
 }
 ```
 
-Edelläolevassa esimerkissä syötettä ei suoraan muokata, vaan metodissa palautetaan uusi lista predikaatin täyttämällä ehdolla.
-
 ### Muuttumaton data (Immutable data)
 
 Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää datan suora muokkaaminen. Olio-kielissä tämä edellyttää sellaista olioiden tekemistä, jotka eivät anna muokata omia muuttujiaan.
@@ -80,6 +150,43 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää dat
 #### Javalla
 
 Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaa suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on rakentaja-olio (Builder-pattern).
+
+*dataluokan rajapinta*
+
+```java
+package functional.java;
+
+import java.io.Serializable;
+
+public interface ContactInformation extends Serializable {
+	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
+
+	String getStreetAddress();
+
+	String getPostCode();
+
+	String getPostOffice();
+
+	public static final class NoContactInformation implements ContactInformation {
+		@Override
+		public String getStreetAddress() {
+			return "";
+		}
+
+		@Override
+		public String getPostCode() {
+			return "";
+		}
+
+		@Override
+		public String getPostOffice() {
+			return "";
+		}
+	}
+}
+```
+
+Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
 *muuttumaton dataluokka*
 
@@ -114,6 +221,8 @@ public class Address implements ContactInformation {
 }
 ```
 
+Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään.
+
 *rakentaja*
 
 ```java
@@ -145,7 +254,7 @@ public class AddressBuilder {
 }
 ```
 
-Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/).
+Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
 
 #### C++:lla
 
@@ -184,14 +293,18 @@ public interface Function<F, T> {
 
 #### Javalla
 
-Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta.
+Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
+
+Functions.compose:lla muodostettu koostofuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. On mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
 
 *muuntajaluokka*
 
 ```java
 package functional.java.examples;
 
+import static com.google.common.base.Functions.compose;
 import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
+import static java.util.Arrays.asList;
 
 import java.util.Arrays;
 import java.util.List;
@@ -202,47 +315,65 @@ public class AddressTransformer implements Function<String, ContactInformation> 
 	@Override
 	public ContactInformation apply(String input) {
 		try {
-			return toAddress(lines(input));
+			return toAddress(Lines.from(input));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return NO_CONTACT_INFORMATION;
 		}
 	}
-	
+
 	private Address toAddress(final List<String> addressLines) {
-		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(first(addressLines));
-		addressBuilder.withPostCode(first(words(second(addressLines))));
-		addressBuilder.withPostOffice(second(words(second(addressLines))));
+		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(First.of(addressLines));
+		addressBuilder.withPostCode(firstWord(Second.of(addressLines)));
+		addressBuilder.withPostOffice(secondWord(Second.of(addressLines)));
 		return addressBuilder.build();
 	}
-
-	private static List<String> lines(String input) {
-		return new Lines().apply(input);
-	}
-
-	private static class Lines implements Function<String, List<String>> {
-		@Override
-		public List<String> apply(String input) {
-			return Arrays.asList(input.split("\n"));
-		}
+	
+	public static String firstWord(String input) {
+		return compose(new First(), new Words()).apply(input);
 	}
 	
-	private static List<String> words(final String input) {
-		return new Words().apply(input);
+	public static String secondWord(String input) {
+		return compose(new Second(), new Words()).apply(input);
 	}
 
-	private static class Words implements Function<String, List<String>> {
+	public static class Lines implements Function<String, List<String>> {
+		@Override
+		public List<String> apply(String input) {
+			return asList(input.split("\n"));
+		}
+		
+		public static List<String> from(String input) {
+			return new Lines().apply(input);
+		}
+	}
+
+	public static class Words implements Function<String, List<String>> {
 		@Override
 		public List<String> apply(String input) {
 			return Arrays.asList(input.split(" "));
 		}
 	}
-	
-	private static String first(final List<String> list) {
-		return list.get(0);
-	}
 
-	private static String second(final List<String> list) {
-		return list.get(1);
+	public static class First implements Function<List<String>, String> {
+		@Override
+		public String apply(List<String> input) {
+			return input.get(0);
+		}
+		
+		public static String of(List<String> input) {
+			return new First().apply(input);
+		}
+	}
+	
+	public static class Second implements Function<List<String>, String> {
+		@Override
+		public String apply(List<String> input) {
+			return input.get(1);
+		}
+		
+		public static String of(List<String> input) {
+			return new Second().apply(input);
+		}
 	}
 }
 ```
@@ -284,7 +415,7 @@ public class AddressTransformerTest {
 }
 ```
 
-Voimme helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen. Tämä välimuisti ei tallenna pelkästään avain-arvo -pareja, vaan myös funktion jolla uusi arvo tarpeen mukaan saadaan.
+Guava-kirjastolla helposti saada aikaan vaikkapa välimuistin käyttämällä funktiota, joka ottaa funktioita syötteekseen. Tämä välimuisti ei tallenna pelkästään avain-arvo -pareja, vaan myös funktion jolla uusi arvo tarpeen mukaan saadaan.
 
 ```java
 package functional.java.examples;
@@ -317,185 +448,75 @@ public class CachingFunction<F, T> implements Function<F, T> {
 	}
 }
 ```
-Muutetaanpa edellisen kappaleen esimerkin tietokantahaku funktioksi.
-
-*Rajapinta*
-
-```java
-package functional.java;
-
-public interface ContactInfoFetcher {
-	public String fetch(DbKey input);
-}
-```
-
-*Toteutus*
-
-```java
-package functional.java;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.inject.Inject;
-
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-
-import com.google.common.base.Function;
-
-public class DbContactInfoFetcher implements ContactInfoFetcher, Function<DbKey, String> {
-	@Inject
-	private QueryRunner database;
-
-	@Override
-	public String fetch(DbKey input) {
-		return apply(input);
-	}
-
-	private static final class FirstStringHandler implements ResultSetHandler<String> {
-		@Override
-		public String handle(ResultSet rs) throws SQLException {
-			if (rs.next()) {
-				return rs.getString(0);
-			}
-			throw new SQLException("No result");
-		}
-	}
-
-	@Override
-	public String apply(DbKey input) {
-		try {
-			return database.query("select " + input.getFieldName() + " from contactinfo where id = ?", new FirstStringHandler(),
-				input.getId());
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-}
-```
-
-Nyt voimme toteuttaa ContactInfoFetcher-rajapinnan siten, että se käyttää välimuistin hyödyksi.
-
-*Toteutus välimuistilla*
-
-```java
-package functional.java;
-
-import com.google.common.base.Function;
-
-public class CachedContactInfoFetcher implements ContactInfoFetcher {
-	private final Function<DbKey, String> cache = CachingFunction.cache(new DbContactInfoFetcher());
-
-	@Override
-	public String fetch(DbKey input) {
-		return cache.apply(input);
-	}
-}
-```
-
-Guava kirjastossa on myös monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jolla voi mm. muodostaa koostefunktioita.
 
 ### Tyyppimuunnokset (Type-transformation)
 
 Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
-Toinen tapa rakentaa muuttumattomia olioita on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön.
+#### Javalla
 
-*edustajan rajapinta*
-
-```java
-package functional.java;
-
-import java.io.Serializable;
-
-public interface ContactInformation extends Serializable {
-	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
-
-	String getStreetAddress();
-
-	String getPostCode();
-
-	String getPostOffice();
-
-	public static final class NoContactInformation implements ContactInformation {
-		@Override
-		public String getStreetAddress() {
-			return "";
-		}
-
-		@Override
-		public String getPostCode() {
-			return "";
-		}
-
-		@Override
-		public String getPostOffice() {
-			return "";
-		}
-	}
-}
-```
+Yksi tapa tehdä tyyppimuunnoksia (ja muuttumatonta dataa) on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön. Myös edustajia voidaan ketjuttaa toisiinsa siten että syntyy kutsuketju alkuperäiseen syötteeseen saakka.
 
 *edustaja*
 
 ```java
-package functional.java;
+package functional.java.examples;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import static functional.java.examples.AddressTransformer.*;
 
-import javax.inject.Inject;
+public class PostalAddress implements ContactInformation {
+	private final String address;
 
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.ResultSetHandler;
-
-public class DbAddress implements ContactInformation {
-	@Inject
-	private QueryRunner database;
-	private final Integer id;
-
-	public DbAddress(Integer id) {
-		this.id = id;
+	public PostalAddress(String address) {
+		this.address = address;
 	}
 
 	@Override
 	public String getStreetAddress() {
-		return fetchDbContactInfo("streetAddress");
+		return First.of(Lines.from(address));
 	}
 
 	@Override
 	public String getPostCode() {
-		return fetchDbContactInfo("postCode");
+		return firstWord(Second.of(Lines.from(address)));
 	}
 
 	@Override
 	public String getPostOffice() {
-		return fetchDbContactInfo("postOffice");
-	}
-
-	private String fetchDbContactInfo(String fieldName) {
-		try {
-			return database.query("select " + fieldName + " from contactinfo where id = ?", new FirstStringHandler(), id);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static final class FirstStringHandler implements ResultSetHandler<String> {
-		@Override
-		public String handle(ResultSet rs) throws SQLException {
-			if (rs.next()) {
-				return rs.getString(0);
-			}
-			throw new SQLException("No result");
-		}
+		return secondWord(Second.of(Lines.from(address)));
 	}
 }
 ```
 
-Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota on hyvä käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+*tyyppimuunoksen testi*
 
+```java
+package functional.java.examples;
+
+import static junit.framework.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class PostalAddressTest {
+	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
+	private final static ContactInformation postalAddress = new PostalAddress(ADDRESS);
+	
+	@Test
+	public void hasCorrectStreetAddress() {
+		assertEquals("Testitie 5", postalAddress.getStreetAddress());
+	}
+
+	@Test
+	public void hasCorrectPostCode() {
+		assertEquals("00999", postalAddress.getPostCode());
+	}
+	
+	@Test
+	public void hasCorrectPostOffice() {
+		assertEquals("OLEMATON", postalAddress.getPostOffice());
+	}
+}
+```
 
 #### C++:lla
 
