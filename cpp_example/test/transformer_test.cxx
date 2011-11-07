@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include <boost/shared_ptr.hpp>
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
@@ -10,21 +11,20 @@ public:
     Address(string streetAddress, string postalCode, string postOffice)
         : m_streetAddress(streetAddress),
           m_postalCode(postalCode),
-          m_postOffice(postOffice)
-    {
-    }
+          m_postOffice(postOffice) {}
 
-    const string& streetAddress() { return m_streetAddress; }
-    const string& postalCode() { return m_postalCode; }
-    const string& postOffice() { return m_postOffice; }
+    const string& streetAddress() const { return m_streetAddress; }
+    const string& postalCode() const { return m_postalCode; }
+    const string& postOffice() const { return m_postOffice; }
 
 private:
-    string m_streetAddress;
-    string m_postalCode;
-    string m_postOffice;
+    const string m_streetAddress;
+    const string m_postalCode;
+    const string m_postOffice;
 };
 
-static Address NO_ADDRESS = Address("", "", "");
+static const shared_ptr<Address> NO_ADDRESS =
+    shared_ptr<Address>(new Address("", "", ""));
 
 const vector<string> lines(const string& input)
 {
@@ -40,7 +40,7 @@ const vector<string> words(const string& input)
     return words;
 }
 
-const Address toAddress(string input)
+const shared_ptr<Address> toAddress(string input)
 {
     vector<string> addrLines = lines(input);
     if (addrLines.size() != 2) return NO_ADDRESS;
@@ -48,7 +48,9 @@ const Address toAddress(string input)
     vector<string> codeAndOffice = words(addrLines[1]);
     if (codeAndOffice.size() != 2) return NO_ADDRESS;
 
-    return Address(addrLines[0], codeAndOffice[0], codeAndOffice[1]);
+    return shared_ptr<Address>(new Address(addrLines[0],
+                                           codeAndOffice[0],
+                                           codeAndOffice[1]));
 }
 
 TEST(TransformerTest, testLines)
@@ -67,8 +69,17 @@ TEST(TransformerTest, testWords)
 
 TEST(TransformerTest, testValidAddress)
 {
-    Address address = toAddress("Mystreet 35 B 74\n00180 Helsinki");
-    EXPECT_EQ("Mystreet 35 B 74", address.streetAddress());
-    EXPECT_EQ("00180", address.postalCode());
-    EXPECT_EQ("Helsinki", address.postOffice());
+    shared_ptr<Address> address = toAddress("Mystreet 35 B 74\n00180 Helsinki");
+    EXPECT_EQ("Mystreet 35 B 74", address->streetAddress());
+    EXPECT_EQ("00180", address->postalCode());
+    EXPECT_EQ("Helsinki", address->postOffice());
+}
+
+TEST(TransformerTest, testInvalidAddress)
+{
+    shared_ptr<Address> address = toAddress("\nINVALID\nADDRESS\nFORMAT");
+    EXPECT_EQ(NO_ADDRESS, address);
+    EXPECT_EQ("", address->streetAddress());
+    EXPECT_EQ("", address->postalCode());
+    EXPECT_EQ("", address->postOffice());
 }
