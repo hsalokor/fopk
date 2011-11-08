@@ -221,7 +221,7 @@ public class Address implements ContactInformation {
 }
 ```
 
-Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään.
+Mikäli muuttumattiomien olioiden muodostimen (constructor) parametrejä on paljon, apuna voidaan käyttää rakentaja-olioa. Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään. 
 
 *rakentaja*
 
