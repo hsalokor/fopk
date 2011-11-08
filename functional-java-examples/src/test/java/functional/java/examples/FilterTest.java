@@ -18,13 +18,23 @@ public class FilterTest {
 
 	@Test
 	public void filterBeasts() {
-		List<String> petsWithoutBeasts = new Filter().apply(PETS, new NoBeastsCondition());
+		List<String> petsWithoutBeasts = new Filter().apply(PETS, new Condition<String>() {
+			@Override
+			public boolean apply(String input) {
+				return isNoBeast(input);
+			}
+		});
 		assertNoBeasts(petsWithoutBeasts);
 	}
 	
 	@Test
 	public void filterBeastsWithGuava() {
-		Iterable<String> petsWithoutBeasts = filter(PETS, new NoBeastsPredicate());
+		Iterable<String> petsWithoutBeasts = filter(PETS, new Predicate<String>() {
+			@Override
+			public boolean apply(String input) {
+				return isNoBeast(input);
+			}
+		});
 		assertNoBeasts(petsWithoutBeasts);
 	}
 	
@@ -33,20 +43,6 @@ public class FilterTest {
 			for (String beast : BEASTS) {
 				assertFalse(pet.equals(beast));
 			}
-		}
-	}
-
-	private static final class NoBeastsPredicate implements Predicate<String> {
-		@Override
-		public boolean apply(String input) {
-			return isNoBeast(input);
-		}
-	}
-
-	private final class NoBeastsCondition implements Condition<String> {
-		@Override
-		public boolean apply(String input) {
-			return isNoBeast(input);
 		}
 	}
 	

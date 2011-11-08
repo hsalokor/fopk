@@ -145,7 +145,7 @@ vector<string> filter(const vector<string>& values,
 
 ### Muuttumaton data (Immutable data)
 
-Yksi helpoimpia tapoja vähentää sivuvaikutuksien muodostumista on estää datan suora muokkaaminen. Olio-kielissä tämä edellyttää sellaista olioiden tekemistä, jotka eivät anna muokata omia muuttujiaan.
+Yksi helpoimpia tapoja vähentää sivuvaikutuksien syntymistä on estää datan suora muokkaaminen. Imperatiivisissä kielissä tämä tarkoittaa sitä että muuttujat alustetaan arvoilla vain kerran, eikä niille anneta myöhemmin uusia arvoja.
 
 #### Javalla
 
@@ -221,7 +221,7 @@ public class Address implements ContactInformation {
 }
 ```
 
-Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään.
+Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään.
 
 *rakentaja*
 
@@ -481,7 +481,7 @@ public class AddressTransformerTest {
 
 ### Tyyppimuunnokset (Type-transformation)
 
-Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
+Tyyppimuunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
 
 #### Javalla
 
