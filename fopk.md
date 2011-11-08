@@ -260,7 +260,7 @@ Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, k
 
 C++:ssa ei ole muuttumattomia tietorakenteita, mutta *const*-avainsanan käytöllä voidaan estää esimerkiksi syötteenä välitettävän listan muokkaaminen. Const-asiasanaa voidaan käyttää arvon, osoittimen tai metodin yhteydessä. Const-määre arvon yhteydessä estää arvon muokkaamisen, kun taas osoittimen const-asiasana rajoittaa vain ja ainoastaan osoittimen muokkaamista. Metodin yhteydessä const-asiasana estää sekä luokan jäsenten muokkaamisen, että sellaisten metodien kutsumisen joissa ei ole const-määrettä.
 
-Nolla-arvojen määrittäminen on mahdollista myös C++:ssa, mutta olioarvoja palautettaessa on syytä olla tarkkana. Päätetään esimerkiksi periä Address-luokasta NoAdress-aliluokka ja määrittää kumpaankin isValid() metodi. Mikäli olio palautetaan arvona (engl. value), palautettava objekti leikkautuu (engl. slicing). Leikkautumisella tarkoitetaan sitä, että kaikki peritty toiminnallisuus katoaa, koska muistia on varattu vain kantaluokan koon verran. (TBD: selvennä)
+Nolla-arvojen määrittäminen on mahdollista myös C++:ssa, mutta olioarvoja palautettaessa on syytä olla tarkkana. Päätetään esimerkiksi periä Address-luokasta NoAdress-aliluokka ja määrittää kumpaankin isValid() metodi. Mikäli olio palautetaan arvona (value), palautettava objekti leikkautuu (slicing). Leikkautumisella tarkoitetaan sitä, että kaikki peritty toiminnallisuus katoaa, koska muistia on varattu vain kantaluokan koon verran. (TBD: selvennä)
 
 ```cpp
 class Address
@@ -485,7 +485,7 @@ Muunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta 
 
 #### Javalla
 
-Yksi tapa tehdä tyyppimuunnoksia (ja muuttumatonta dataa) on edustaja (Proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön. Myös edustajia voidaan ketjuttaa toisiinsa siten että syntyy kutsuketju alkuperäiseen syötteeseen saakka.
+Yksi tapa tehdä tyyppimuunnoksia (ja muuttumatonta dataa) on edustaja (proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön. Myös edustajia voidaan ketjuttaa toisiinsa siten että syntyy kutsuketju alkuperäiseen syötteeseen saakka.
 
 *edustaja*
 
@@ -547,8 +547,6 @@ public class PostalAddressTest {
 	}
 }
 ```
-
-#### C++:lla
 
 ## Yhteenveto
 
