@@ -548,9 +548,9 @@ public class PostalAddressTest {
 
 ## Yhteenveto
 
-Monet funktionaaliset tekniikat käytettynä imperatiivisissä kielissä tuottavat lisää laskentaa paikkoihin jossa perinteisesti on ylläpidetty tilaa. Tästä ei kannata kuitenkaan huolestua, sillä mikäli suorituskykyongelmia löytyy ne voidaan ratkaista esimerkiksi oikein sijoitetun välimuistin avulla. Funktionaalisessa ohjelmoinnissa välimuisti on funktio, joka muistaa syötteellä saadun arvon.
+Monet funktionaaliset tekniikat käytettynä imperatiivisissä kielissä tuottavat lisää laskentaa paikkoihin jossa perinteisesti on ylläpidetty tilaa. Tästä ei kannata kuitenkaan huolestua, sillä mikäli suorituskykyongelmia löytyy ne voidaan ratkaista esimerkiksi oikein sijoitetun välimuistin avulla tai säikeistämällä. Mitä muuta välimuisti onkaan kuin funktio joka muistaa syötteellä saadun arvon!
 
-Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta. Erityisesti ulkoisia kirjastoja käytettäessä voi olla hankalaa ohjelmoida funktionaalisella tavalla. Halu lipsua muuttumattoman datan käytöstä tai muunnoksien tekemisestä saattaa joskus kasvaa aikataulupaineiden kerääntyessä. Funktionaalisella tiellä pysyminen kuitenkin kannattaa, sillä funktionaalisesti kirjoitettu koodi on helposti luettavampaa ja muokattavampaa kuin imperatiiviseen tapaan kirjoitettu. Funktionaalisen tapaan kirjoitettu koodi on helpompaa testata myös suurempina yksikköinä kuin luokkatasolla.
+Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta. Erityisesti ulkoisia kirjastoja käytettäessä voi olla hankalaa ohjelmoida funktionaalisella tavalla. Halu lipsua muuttumattoman datan käytöstä tai muunnoksien tekemisestä saattaa kasvaa aikataulupaineiden kerääntyessä. Funktionaalisella tiellä pysyminen kuitenkin kannattaa, sillä funktionaalisesti kirjoitettu koodi on helposti luettavampaa ja muokattavampaa kuin imperatiiviseen tapaan kirjoitettu. Tämän lisäksi se on helpompaa testata myös suurempina yksikköinä kuin luokkatasolla.
 
 Me allekirjoittaneet toivomme kaikille lukijoille mukavia funktionaalisia koodaushetkiä!
 
