@@ -10,17 +10,19 @@ Soveltamalla muutamia funktionaalisen ohjelmoinnin käsitteitä voidaan imperati
 
 ## Funktionaaliset ohjelmointitekniikat
 
-Seuraavissa kappaleissa esittelemme funktionaalisten kielien käsitteitä ja esimerkkejä sekä Javalla että C++:lla.
+Lähes kaikki esitellyt tekniikat tähtäävät ohjelman ylläpitämän tilan vähentämiseen. Mitä vähemmän ylläpidettyä tilaa on, sitä vähemmän on myös odottamattomia sivuvaikutuksia. Täydelliseen tilattomuuteen ei yleensä imperatiivisella ohjelmointikielellä kirjoitetussa ohjelmassa ole mahdollisuutta, eikä sen saavuttamiseksi kannata käyttää liikaa vaivaa.
+
+Seuraavissa kappaleissa esittelemme funktionaalisten kielien käsitteitä ja esimerkkejä sekä Javalla että C++:lla. Esimerkit on kirjoitettu siten että ne kuvaavat esiteltyä tekniikkaa, eivätkä ne suoraan pohjaudu tosimaailman tilanteisiin. Ne on pyritty tekemään luettaviksi ja toimivat samalla dokumenttina esitellystä tekniikasta.
 
 Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
 
 ### Tilattomat funktiot (Stateless function)
 
-Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa. Funktiota käytettäessä on tärkeää välttää null-arvojen palauttamista, sillä tällöin funktioketjun suorittaminen päättyy poikkeukseen.
+Proseduraalisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa. Funktiota käytettäessä on tärkeää välttää nolla-arvojen (null) palauttamista, sillä tällöin funktioketjun suorittaminen päättyy poikkeukseen.
 
 #### Javalla
 
-Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan palautetaan uusi lista joka täyttä ehdon. 
+Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan palautetaan uusi lista joka täyttää ehdon. Suotimen ehto on rajapinta, joka usein toteutetaan nimettömänä (anonymous) luokkana.
 
 *Suodin*
 
@@ -47,7 +49,7 @@ public class Filter {
 }
 ```
 
-Seuraavaksi suotimen testi ja esimerkki suotimen käytöstä [Googlen guava-kirjastolla](http://code.google.com/p/guava-libraries/).
+Seuraavaksi suotimen testi ja esimerkki suotimen käytöstä [Googlen guava-kirjastolla](http://code.google.com/p/guava-libraries/). Aiemmin esitelty Condition-rajapinta vastaa täysin guava-kirjaston monikäyttöistä Predicate-rajapintaa.
 
 *Suotimen testi*
 
@@ -141,7 +143,7 @@ vector<string> filter(const vector<string>& values,
 
 ### Muuttumaton data (Immutable data)
 
-Yksi helpoimpia tapoja vähentää sivuvaikutuksien syntymistä on estää datan suora muokkaaminen. Imperatiivisissä kielissä tämä tarkoittaa sitä että muuttujat alustetaan arvoilla vain kerran, eikä niille anneta myöhemmin uusia arvoja.
+Yksi helpoimpia tapoja vähentää sivuvaikutuksien syntymistä on estää ohjelmakoodin muuttujien suora muokkaaminen. Imperatiivisissä kielissä tämä tarkoittaa sitä että muuttujat alustetaan arvoilla vain kerran, eikä niille anneta myöhemmin uusia arvoja.
 
 #### Javalla
 
@@ -182,7 +184,7 @@ public interface ContactInformation extends Serializable {
 }
 ```
 
-Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palauttaisi null-arvon. Tällöin null-tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palauttaisi nolla-arvon. Tällöin nolla-arvon tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
 *muuttumaton dataluokka*
 
