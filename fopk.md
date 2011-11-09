@@ -1,5 +1,5 @@
 # Funktionaaliset ohjelmointitekniikat imperatiivisellä kielellä
-## (eli kuinka luovuin käskyistä ja opin rakastamaan lambdaa)
+### (eli kuinka luovuin käskyistä ja opin rakastamaan lambdaa)
 
 Funktionaalisessa ohjelmoinnissa rakennetaan ohjelmisto siten, että se koostuu tilattomista funktioista, joiden tulos riippuu pelkästään syötteestä. Sen pohjana on lambda-kalkyyli ja matematiikasta tuttu funktion käsite. Erona imperatiiviseen ohjelmointiin on se, että funktionaalisessa ohjelmoinnissa arvioidaan lausekkeita käskyjen antamisen sijaan. 
 
