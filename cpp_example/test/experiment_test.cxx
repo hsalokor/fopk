@@ -41,7 +41,7 @@ shared_ptr<vector<string> > filter(function<bool(string)> predicate,
     return results;
 }
 
-TEST(FilterTest, testFilteringByPredicate)
+TEST(FilterTest, testFilteringWithBind)
 {
     shared_ptr<vector<string> > values(new vector<string>());
     values->push_back("foo");
