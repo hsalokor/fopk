@@ -28,118 +28,118 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 *Suodin*
 
 ```java
-package functional.java.examples;
+    package functional.java.examples;
 
-import java.util.ArrayList;
-import java.util.List;
+    import java.util.ArrayList;
+    import java.util.List;
 
-public class Filter {
-	public List<String> apply(List<String> values, Condition<String> predicate) {
-		ArrayList<String> output = new ArrayList<String>();
-		for (String string : values) {
-			if (predicate.apply(string)) {
-				output.add(string);
-			}
-		}
-		return output;
-	}
+    public class Filter {
+        public List<String> apply(List<String> values, Condition<String> predicate) {
+            ArrayList<String> output = new ArrayList<String>();
+            for (String string : values) {
+                if (predicate.apply(string)) {
+                    output.add(string);
+                }
+            }
+            return output;
+        }
 
-	public interface Condition<T> {
-		public boolean apply(T input);
-	}
-}
+        public interface Condition<T> {
+            public boolean apply(T input);
+        }
+    }
 ```
 
 Seuraavaksi suotimen testi ja esimerkki suotimen käytöstä [Googlen guava-kirjastolla](http://code.google.com/p/guava-libraries/). Aiemmin esitelty Condition-rajapinta vastaa täysin guava-kirjaston monikäyttöistä Predicate-rajapintaa.
 
 *Suotimen testi*
 
-````java
-package functional.java.examples;
+```java
+    package functional.java.examples;
 
-import static com.google.common.collect.Iterables.filter;
-import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertFalse;
+    import static com.google.common.collect.Iterables.filter;
+    import static java.util.Arrays.asList;
+    import static junit.framework.Assert.assertFalse;
 
-import java.util.List;
+    import java.util.List;
 
-import org.junit.Test;
+    import org.junit.Test;
 
-import com.google.common.base.Predicate;
+    import com.google.common.base.Predicate;
 
-import functional.java.examples.Filter.Condition;
+    import functional.java.examples.Filter.Condition;
 
-public class FilterTest {
-	private static final List<String> PETS = asList("cat", "dog", "bunny", "tiger");
-	private static final List<String> BEASTS = asList("tiger", "lion", "rhino", "bear");
+    public class FilterTest {
+        private static final List<String> PETS = asList("cat", "dog", "bunny", "tiger");
+        private static final List<String> BEASTS = asList("tiger", "lion", "rhino", "bear");
 
-	@Test
-	public void filterBeasts() {
-		List<String> petsWithoutBeasts = new Filter().apply(PETS, new Condition<String>() {
-			@Override
-			public boolean apply(String input) {
-				return isNoBeast(input);
-			}
-		});
-		assertNoBeasts(petsWithoutBeasts);
-	}
-	
-	@Test
-	public void filterBeastsWithGuava() {
-		Iterable<String> petsWithoutBeasts = filter(PETS, new Predicate<String>() {
-			@Override
-			public boolean apply(String input) {
-				return isNoBeast(input);
-			}
-		});
-		assertNoBeasts(petsWithoutBeasts);
-	}
-	
-	private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
-		for (String pet : petsWithoutBeasts) {
-			for (String beast : BEASTS) {
-				assertFalse(pet.equals(beast));
-			}
-		}
-	}
-	
-	private static boolean isNoBeast(String input) {
-		for (String beast : BEASTS) {
-			if(input.equals(beast)) {
-				return false;
-			}
-		}
-		return true;
-	}
-}
+        @Test
+        public void filterBeasts() {
+            List<String> petsWithoutBeasts = new Filter().apply(PETS, new Condition<String>() {
+                @Override
+                public boolean apply(String input) {
+                    return isNoBeast(input);
+                }
+            });
+            assertNoBeasts(petsWithoutBeasts);
+        }
+        
+        @Test
+        public void filterBeastsWithGuava() {
+            Iterable<String> petsWithoutBeasts = filter(PETS, new Predicate<String>() {
+                @Override
+                public boolean apply(String input) {
+                    return isNoBeast(input);
+                }
+            });
+            assertNoBeasts(petsWithoutBeasts);
+        }
+        
+        private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
+            for (String pet : petsWithoutBeasts) {
+                for (String beast : BEASTS) {
+                    assertFalse(pet.equals(beast));
+                }
+            }
+        }
+        
+        private static boolean isNoBeast(String input) {
+            for (String beast : BEASTS) {
+                if(input.equals(beast)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 ````
 
 #### C++:lla
 
 ```cpp
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
+    #include <boost/function.hpp>
+    #include <boost/bind.hpp>
+    #include <boost/foreach.hpp>
 
-using namespace std;
-using namespace boost;
+    using namespace std;
+    using namespace boost;
 
-bool exact(const string& value, const string& expected)
-{
-    return value == expected;
-}
-
-vector<string> filter(const vector<string>& values,
-                      const function<bool(string)> predicate)
-{
-    vector<string> output;
-    BOOST_FOREACH (string value, values)
+    bool exact(const string& value, const string& expected)
     {
-        if (predicate(value))
-            output.push_back(value);
+        return value == expected;
     }
-    return output;
-}
+
+    vector<string> filter(const vector<string>& values,
+                          const function<bool(string)> predicate)
+    {
+        vector<string> output;
+        BOOST_FOREACH (string value, values)
+        {
+            if (predicate(value))
+                output.push_back(value);
+        }
+        return output;
+    }
 ```
 
 ### Muuttumaton data (Immutable data)
@@ -153,36 +153,36 @@ Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaa
 *dataluokan rajapinta*
 
 ```java
-package functional.java;
+    package functional.java;
 
-import java.io.Serializable;
+    import java.io.Serializable;
 
-public interface ContactInformation extends Serializable {
-	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
+    public interface ContactInformation extends Serializable {
+        public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
-	String getStreetAddress();
+        String getStreetAddress();
 
-	String getPostCode();
+        String getPostCode();
 
-	String getPostOffice();
+        String getPostOffice();
 
-	public static final class NoContactInformation implements ContactInformation {
-		@Override
-		public String getStreetAddress() {
-			return "";
-		}
+        public static final class NoContactInformation implements ContactInformation {
+            @Override
+            public String getStreetAddress() {
+                return "";
+            }
 
-		@Override
-		public String getPostCode() {
-			return "";
-		}
+            @Override
+            public String getPostCode() {
+                return "";
+            }
 
-		@Override
-		public String getPostOffice() {
-			return "";
-		}
-	}
-}
+            @Override
+            public String getPostOffice() {
+                return "";
+            }
+        }
+    }
 ```
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palauttaisi nolla-arvon. Tällöin nolla-arvon tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
@@ -190,34 +190,34 @@ Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INF
 *muuttumaton dataluokka*
 
 ```java
-package functional.java;
+    package functional.java;
 
-public class Address implements ContactInformation {
-	private final String streetAddress;
-	private final String postCode;
-	private final String postOffice;
+    public class Address implements ContactInformation {
+        private final String streetAddress;
+        private final String postCode;
+        private final String postOffice;
 
-	public Address(String streetAddress, String postCode, String postOffice) {
-		this.streetAddress = streetAddress;
-		this.postCode = postCode;
-		this.postOffice = postOffice;
-	}
+        public Address(String streetAddress, String postCode, String postOffice) {
+            this.streetAddress = streetAddress;
+            this.postCode = postCode;
+            this.postOffice = postOffice;
+        }
 
-	@Override
-	public String getStreetAddress() {
-		return streetAddress;
-	}
+        @Override
+        public String getStreetAddress() {
+            return streetAddress;
+        }
 
-	@Override
-	public String getPostCode() {
-		return postCode;
-	}
+        @Override
+        public String getPostCode() {
+            return postCode;
+        }
 
-	@Override
-	public String getPostOffice() {
-		return postOffice;
-	}
-}
+        @Override
+        public String getPostOffice() {
+            return postOffice;
+        }
+    }
 ```
 
 Mikäli muuttumattiomien olioiden muodostimen (constructor) parametrejä on paljon, apuna voidaan käyttää rakentaja-olioa. Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään. 
@@ -225,32 +225,32 @@ Mikäli muuttumattiomien olioiden muodostimen (constructor) parametrejä on palj
 *rakentaja*
 
 ```java
-package functional.java;
+    package functional.java;
 
-public class AddressBuilder {
-	private String buildStreetAddress;
-	private String buildPostCode;
-	private String buildPostOffice;
+    public class AddressBuilder {
+        private String buildStreetAddress;
+        private String buildPostCode;
+        private String buildPostOffice;
 
-	public AddressBuilder withStreetAddress(String streetAddress) {
-		buildStreetAddress = streetAddress;
-		return this;
-	}
+        public AddressBuilder withStreetAddress(String streetAddress) {
+            buildStreetAddress = streetAddress;
+            return this;
+        }
 
-	public AddressBuilder withPostCode(String postCode) {
-		buildPostCode = postCode;
-		return this;
-	}
+        public AddressBuilder withPostCode(String postCode) {
+            buildPostCode = postCode;
+            return this;
+        }
 
-	public AddressBuilder withPostOffice(String postOffice) {
-		buildPostOffice = postOffice;
-		return this;
-	}
+        public AddressBuilder withPostOffice(String postOffice) {
+            buildPostOffice = postOffice;
+            return this;
+        }
 
-	public Address build() {
-		return new Address(buildStreetAddress, buildPostCode, buildPostOffice);
-	}
-}
+        public Address build() {
+            return new Address(buildStreetAddress, buildPostCode, buildPostOffice);
+        }
+    }
 ```
 
 Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
@@ -262,26 +262,26 @@ C++:ssa ei ole muuttumattomia tietorakenteita, mutta *const*-avainsanan käytöl
 Nolla-arvojen määrittäminen on mahdollista myös C++:ssa, mutta olioarvoja palautettaessa on syytä olla tarkkana. Päätetään esimerkiksi periä Address-luokasta NoAdress-aliluokka ja määrittää kumpaankin isValid() metodi. Mikäli olio palautetaan arvona (value), palautettava objekti leikkautuu (slicing). Leikkautumisella tarkoitetaan sitä, että kaikki peritty toiminnallisuus katoaa, koska muistia on varattu vain kantaluokan koon verran. (TBD: selvennä)
 
 ```cpp
-class Address
-{
-public:
-    bool isValid() { return true; }
-    ...
-};
+    class Address
+    {
+    public:
+        bool isValid() { return true; }
+        ...
+    };
 
-class NoAddress : public Address
-{
-public:
-    bool isValid() { return false; }
-    ...
-};
+    class NoAddress : public Address
+    {
+    public:
+        bool isValid() { return false; }
+        ...
+    };
 
-// Palautettu olio ei leikkautumisen vuoksi ikinä palauta isValid()-kutsulle
-// arvoa false!
-Address toAddress(string input)
-{
-    ...
-}
+    // Palautettu olio ei leikkautumisen vuoksi ikinä palauta isValid()-kutsulle
+    // arvoa false!
+    Address toAddress(string input)
+    {
+        ...
+    }
 ```
 
 Edellä mainittu esimerkki toimii, mikäli paluuarvo on osoitin, viite tai esimerkiksi shared_ptr<Address>. Java-esimerkkiä vastaava jaettua tyhjää oliota käyttävä esimerkki on alla:
@@ -289,53 +289,53 @@ Edellä mainittu esimerkki toimii, mikäli paluuarvo on osoitin, viite tai esime
 *Esimerkki C++:lla*
 
 ```cpp
-class Address
-{
-public:
-    Address(string streetAddress, string postalCode, string postOffice)
-        : m_streetAddress(streetAddress),
-          m_postalCode(postalCode),
-          m_postOffice(postOffice) {}
+    class Address
+    {
+    public:
+        Address(string streetAddress, string postalCode, string postOffice)
+            : m_streetAddress(streetAddress),
+              m_postalCode(postalCode),
+              m_postOffice(postOffice) {}
 
-    const string& streetAddress() const { return m_streetAddress; }
-    const string& postalCode() const { return m_postalCode; }
-    const string& postOffice() const { return m_postOffice; }
+        const string& streetAddress() const { return m_streetAddress; }
+        const string& postalCode() const { return m_postalCode; }
+        const string& postOffice() const { return m_postOffice; }
 
-private:
-    const string m_streetAddress;
-    const string m_postalCode;
-    const string m_postOffice;
-};
+    private:
+        const string m_streetAddress;
+        const string m_postalCode;
+        const string m_postOffice;
+    };
 
-static const shared_ptr<Address> NO_ADDRESS =
-    shared_ptr<Address>(new Address("", "", ""));
+    static const shared_ptr<Address> NO_ADDRESS =
+        shared_ptr<Address>(new Address("", "", ""));
 
-const vector<string> lines(const string& input)
-{
-    vector<string> lines;
-    split(lines, input, is_any_of("\n"));
-    return lines;
-}
+    const vector<string> lines(const string& input)
+    {
+        vector<string> lines;
+        split(lines, input, is_any_of("\n"));
+        return lines;
+    }
 
-const vector<string> words(const string& input)
-{
-    vector<string> words;
-    split(words, input, is_any_of(" "));
-    return words;
-}
+    const vector<string> words(const string& input)
+    {
+        vector<string> words;
+        split(words, input, is_any_of(" "));
+        return words;
+    }
 
-const shared_ptr<Address> toAddress(string input)
-{
-    vector<string> addrLines = lines(input);
-    if (addrLines.size() != 2) return NO_ADDRESS;
+    const shared_ptr<Address> toAddress(string input)
+    {
+        vector<string> addrLines = lines(input);
+        if (addrLines.size() != 2) return NO_ADDRESS;
 
-    vector<string> codeAndOffice = words(addrLines[1]);
-    if (codeAndOffice.size() != 2) return NO_ADDRESS;
+        vector<string> codeAndOffice = words(addrLines[1]);
+        if (codeAndOffice.size() != 2) return NO_ADDRESS;
 
-    return shared_ptr<Address>(new Address(addrLines[0],
-                                           codeAndOffice[0],
-                                           codeAndOffice[1]));
-}
+        return shared_ptr<Address>(new Address(addrLines[0],
+                                               codeAndOffice[0],
+                                               codeAndOffice[1]));
+    }
 ```
 
 ### Koostaminen (Composition)
@@ -349,11 +349,11 @@ Javassa ja C++:ssa koostaminen tehdään funktio-olioilla, jotka alustetaan syö
 Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http://code.google.com/p/guava-libraries/).
 
 ```java
-package functional.java;
+    package functional.java;
 
-public interface Function<F, T> {
-	public T apply(F input);
-}
+    public interface Function<F, T> {
+        public T apply(F input);
+    }
 ````
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
@@ -363,119 +363,119 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 *muuntajaluokka*
 
 ```java
-package functional.java.examples;
+    package functional.java.examples;
 
-import static com.google.common.base.Functions.compose;
-import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
-import static java.util.Arrays.asList;
+    import static com.google.common.base.Functions.compose;
+    import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
+    import static java.util.Arrays.asList;
 
-import java.util.Arrays;
-import java.util.List;
+    import java.util.Arrays;
+    import java.util.List;
 
-import com.google.common.base.Function;
+    import com.google.common.base.Function;
 
-public class AddressTransformer implements Function<String, ContactInformation> {
-	@Override
-	public ContactInformation apply(String input) {
-		try {
-			return toAddress(Lines.from(input));
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return NO_CONTACT_INFORMATION;
-		}
-	}
+    public class AddressTransformer implements Function<String, ContactInformation> {
+        @Override
+        public ContactInformation apply(String input) {
+            try {
+                return toAddress(Lines.from(input));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return NO_CONTACT_INFORMATION;
+            }
+        }
 
-	private Address toAddress(final List<String> addressLines) {
-		AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(First.of(addressLines));
-		addressBuilder.withPostCode(firstWord(Second.of(addressLines)));
-		addressBuilder.withPostOffice(secondWord(Second.of(addressLines)));
-		return addressBuilder.build();
-	}
-	
-	public static String firstWord(String input) {
-		return compose(new First(), new Words()).apply(input);
-	}
-	
-	public static String secondWord(String input) {
-		return compose(new Second(), new Words()).apply(input);
-	}
+        private Address toAddress(final List<String> addressLines) {
+            AddressBuilder addressBuilder = new AddressBuilder().withStreetAddress(First.of(addressLines));
+            addressBuilder.withPostCode(firstWord(Second.of(addressLines)));
+            addressBuilder.withPostOffice(secondWord(Second.of(addressLines)));
+            return addressBuilder.build();
+        }
+        
+        public static String firstWord(String input) {
+            return compose(new First(), new Words()).apply(input);
+        }
+        
+        public static String secondWord(String input) {
+            return compose(new Second(), new Words()).apply(input);
+        }
 
-	public static class Lines implements Function<String, List<String>> {
-		@Override
-		public List<String> apply(String input) {
-			return asList(input.split("\n"));
-		}
-		
-		public static List<String> from(String input) {
-			return new Lines().apply(input);
-		}
-	}
+        public static class Lines implements Function<String, List<String>> {
+            @Override
+            public List<String> apply(String input) {
+                return asList(input.split("\n"));
+            }
+            
+            public static List<String> from(String input) {
+                return new Lines().apply(input);
+            }
+        }
 
-	public static class Words implements Function<String, List<String>> {
-		@Override
-		public List<String> apply(String input) {
-			return Arrays.asList(input.split(" "));
-		}
-	}
+        public static class Words implements Function<String, List<String>> {
+            @Override
+            public List<String> apply(String input) {
+                return Arrays.asList(input.split(" "));
+            }
+        }
 
-	public static class First implements Function<List<String>, String> {
-		@Override
-		public String apply(List<String> input) {
-			return input.get(0);
-		}
-		
-		public static String of(List<String> input) {
-			return new First().apply(input);
-		}
-	}
-	
-	public static class Second implements Function<List<String>, String> {
-		@Override
-		public String apply(List<String> input) {
-			return input.get(1);
-		}
-		
-		public static String of(List<String> input) {
-			return new Second().apply(input);
-		}
-	}
-}
+        public static class First implements Function<List<String>, String> {
+            @Override
+            public String apply(List<String> input) {
+                return input.get(0);
+            }
+            
+            public static String of(List<String> input) {
+                return new First().apply(input);
+            }
+        }
+        
+        public static class Second implements Function<List<String>, String> {
+            @Override
+            public String apply(List<String> input) {
+                return input.get(1);
+            }
+            
+            public static String of(List<String> input) {
+                return new Second().apply(input);
+            }
+        }
+    }
 ```
 
 *muuntajaluokan testi*
 
 ```java
-package functional.java.examples;
+    package functional.java.examples;
 
-import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
-import static junit.framework.Assert.assertEquals;
+    import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
+    import static junit.framework.Assert.assertEquals;
 
-import org.junit.Test;
+    import org.junit.Test;
 
-public class AddressTransformerTest {
-	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
-	private final static String MISSING_CITY = "Testitie 5\n00999OLEMATON";
-	private final static String MISSING_SECOND_LINE = "FUBAR";
+    public class AddressTransformerTest {
+        private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
+        private final static String MISSING_CITY = "Testitie 5\n00999OLEMATON";
+        private final static String MISSING_SECOND_LINE = "FUBAR";
 
-	@Test
-	public void hasCorrectAddressFields() {
-		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
-		assertEquals("Testitie 5", address.getStreetAddress());
-		assertEquals("00999", address.getPostCode());
-		assertEquals("OLEMATON", address.getPostOffice());
-	}
+        @Test
+        public void hasCorrectAddressFields() {
+            final ContactInformation address = new AddressTransformer().apply(ADDRESS);
+            assertEquals("Testitie 5", address.getStreetAddress());
+            assertEquals("00999", address.getPostCode());
+            assertEquals("OLEMATON", address.getPostOffice());
+        }
 
-	@Test
-	public void hasNoContactInformationWithMissingCity() {
-		final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
-		assertEquals(NO_CONTACT_INFORMATION, address);
-	}
+        @Test
+        public void hasNoContactInformationWithMissingCity() {
+            final ContactInformation address = new AddressTransformer().apply(MISSING_CITY);
+            assertEquals(NO_CONTACT_INFORMATION, address);
+        }
 
-	@Test
-	public void hasNoContactInformationWithMissingSecondLine() {
-		final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
-		assertEquals(NO_CONTACT_INFORMATION, address);
-	}
-}
+        @Test
+        public void hasNoContactInformationWithMissingSecondLine() {
+            final ContactInformation address = new AddressTransformer().apply(MISSING_SECOND_LINE);
+            assertEquals(NO_CONTACT_INFORMATION, address);
+        }
+    }
 ```
 
 ### Tyyppimuunnokset (Type-transformation)
@@ -489,62 +489,62 @@ Yksi tapa tehdä tyyppimuunnoksia (ja muuttumatonta dataa) on edustaja (proxy). 
 *edustaja*
 
 ```java
-package functional.java.examples;
+    package functional.java.examples;
 
-import static functional.java.examples.AddressTransformer.*;
+    import static functional.java.examples.AddressTransformer.*;
 
-public class PostalAddress implements ContactInformation {
-	private final String address;
+    public class PostalAddress implements ContactInformation {
+        private final String address;
 
-	public PostalAddress(String address) {
-		this.address = address;
-	}
+        public PostalAddress(String address) {
+            this.address = address;
+        }
 
-	@Override
-	public String getStreetAddress() {
-		return First.of(Lines.from(address));
-	}
+        @Override
+        public String getStreetAddress() {
+            return First.of(Lines.from(address));
+        }
 
-	@Override
-	public String getPostCode() {
-		return firstWord(Second.of(Lines.from(address)));
-	}
+        @Override
+        public String getPostCode() {
+            return firstWord(Second.of(Lines.from(address)));
+        }
 
-	@Override
-	public String getPostOffice() {
-		return secondWord(Second.of(Lines.from(address)));
-	}
-}
+        @Override
+        public String getPostOffice() {
+            return secondWord(Second.of(Lines.from(address)));
+        }
+    }
 ```
 
 *tyyppimuunoksen testi*
 
 ```java
-package functional.java.examples;
+    package functional.java.examples;
 
-import static junit.framework.Assert.assertEquals;
+    import static junit.framework.Assert.assertEquals;
 
-import org.junit.Test;
+    import org.junit.Test;
 
-public class PostalAddressTest {
-	private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
-	private final static ContactInformation postalAddress = new PostalAddress(ADDRESS);
-	
-	@Test
-	public void hasCorrectStreetAddress() {
-		assertEquals("Testitie 5", postalAddress.getStreetAddress());
-	}
+    public class PostalAddressTest {
+        private final static String ADDRESS = "Testitie 5\n00999 OLEMATON";
+        private final static ContactInformation postalAddress = new PostalAddress(ADDRESS);
+        
+        @Test
+        public void hasCorrectStreetAddress() {
+            assertEquals("Testitie 5", postalAddress.getStreetAddress());
+        }
 
-	@Test
-	public void hasCorrectPostCode() {
-		assertEquals("00999", postalAddress.getPostCode());
-	}
-	
-	@Test
-	public void hasCorrectPostOffice() {
-		assertEquals("OLEMATON", postalAddress.getPostOffice());
-	}
-}
+        @Test
+        public void hasCorrectPostCode() {
+            assertEquals("00999", postalAddress.getPostCode());
+        }
+        
+        @Test
+        public void hasCorrectPostOffice() {
+            assertEquals("OLEMATON", postalAddress.getPostOffice());
+        }
+    }
 ```
 
 ## Yhteenveto
