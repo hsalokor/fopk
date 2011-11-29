@@ -5,25 +5,25 @@ import java.io.Serializable;
 public interface ContactInformation extends Serializable {
 	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
-	String getStreetAddress();
+	String streetAddress();
 
-	String getPostCode();
+	String postCode();
 
-	String getPostOffice();
+	String postOffice();
 
 	public static final class NoContactInformation implements ContactInformation {
 		@Override
-		public String getStreetAddress() {
+		public String streetAddress() {
 			return "";
 		}
 
 		@Override
-		public String getPostCode() {
+		public String postCode() {
 			return "";
 		}
 
 		@Override
-		public String getPostOffice() {
+		public String postOffice() {
 			return "";
 		}
 	}

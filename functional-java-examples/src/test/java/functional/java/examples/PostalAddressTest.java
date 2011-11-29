@@ -9,17 +9,17 @@ public class PostalAddressTest {
 	private final static ContactInformation postalAddress = new PostalAddress(ADDRESS);
 	
 	@Test
-	public void hasCorrectStreetAddress() {
-		assertEquals("Testitie 5", postalAddress.getStreetAddress());
+	public void firstLineIsStreetAddress() {
+		assertEquals("Testitie 5", postalAddress.streetAddress());
 	}
 
 	@Test
-	public void hasCorrectPostCode() {
-		assertEquals("00999", postalAddress.getPostCode());
+	public void firtsWordOfSecondLineIsPostCode() {
+		assertEquals("00999", postalAddress.postCode());
 	}
 	
 	@Test
-	public void hasCorrectPostOffice() {
-		assertEquals("OLEMATON", postalAddress.getPostOffice());
+	public void restOfWordsOfSecondLineIsPostOffice() {
+		assertEquals("OLEMATON", postalAddress.postOffice());
 	}
 }

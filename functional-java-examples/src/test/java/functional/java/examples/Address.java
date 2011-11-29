@@ -12,17 +12,17 @@ public class Address implements ContactInformation {
 	}
 
 	@Override
-	public String getStreetAddress() {
+	public String streetAddress() {
 		return streetAddress;
 	}
 
 	@Override
-	public String getPostCode() {
+	public String postCode() {
 		return postCode;
 	}
 
 	@Override
-	public String getPostOffice() {
+	public String postOffice() {
 		return postOffice;
 	}
 }

@@ -11,11 +11,11 @@ public class AddressTransformerTest {
 	private final static String MISSING_SECOND_LINE = "FUBAR";
 
 	@Test
-	public void hasCorrectAddressFields() {
+	public void hasAddressFields() {
 		final ContactInformation address = new AddressTransformer().apply(ADDRESS);
-		assertEquals("Testitie 5", address.getStreetAddress());
-		assertEquals("00999", address.getPostCode());
-		assertEquals("OLEMATON", address.getPostOffice());
+		assertEquals("Testitie 5", address.streetAddress());
+		assertEquals("00999", address.postCode());
+		assertEquals("OLEMATON", address.postOffice());
 	}
 
 	@Test

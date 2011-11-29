@@ -10,17 +10,17 @@ public class PostalAddress implements ContactInformation {
 	}
 
 	@Override
-	public String getStreetAddress() {
+	public String streetAddress() {
 		return First.of(Lines.from(address));
 	}
 
 	@Override
-	public String getPostCode() {
+	public String postCode() {
 		return firstWord(Second.of(Lines.from(address)));
 	}
 
 	@Override
-	public String getPostOffice() {
+	public String postOffice() {
 		return secondWord(Second.of(Lines.from(address)));
 	}
 }
