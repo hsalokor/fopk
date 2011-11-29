@@ -19,6 +19,8 @@ Seuraavissa kappaleissa esittelemme funktionaalisten kielien käsitteitä ja esi
 
 Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
 
+Sivuvaikutuksien syntymistä voi välttää esimerkiksi kirjoittamalla tilattomia funktioita.
+
 ### Tilattomat funktiot (Stateless functions)
 
 Imperatiivisessa ohjelmointikielissä metodit voidaan kirjoittaa siten, että ne eivät muokkaa omaa syötettään tai ohjelman tilaa. Funktiota käytettäessä on tärkeää välttää nolla-arvojen (null) palauttamista, sillä tällöin funktioketjun suorittaminen päättyy poikkeukseen.
@@ -129,7 +131,9 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 	}
 ```
 
-Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palauttaisi nolla-arvon. Tällöin nolla-arvon tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palautetaan nolla-arvo. Tällöin nolla-arvon tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
+
+Seuraavassa kappaleessa toteutamme rajapinnan siten, että siinä oleva data ei voi muuttua.
 
 ### Muuttumaton data (Immutable data)
 
@@ -236,6 +240,7 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 
 Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
 
+Kuten edellisessä testissä rakentajan metodeja, myös funktioiden kutsuja voidaan ketjuttaa toistensa perään. Tätä kustutaan koostamiseksi.
 
 ### Koostaminen (Composition)
 
@@ -257,7 +262,7 @@ Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
-Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply-metodia kutsutaan. Siten on mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
+Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. Siten on mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
 
 *muuntajaluokka*
 
@@ -371,13 +376,15 @@ Muuntajaluokkaa käytetään juuri samaan tapaan kuin muitakin funktioita ja sii
 
 Muuntajaluokan testi tarkistaa että virheellisen syötteen tuloksena on aiemmin esitelty NO_CONTACT_INFORMATION-vakio. Tällöin se soveltuu muiden funktioiden kanssa käytettäväksi.
 
+Sen sijaan että dataa muutetaan käskystä eri muotoon, sen voi tehdä myös tyyppimuunnoksena, jolloin se on oikeassa muodossa silloin kun sitä tarvitaan.
+
 ### Tyyppimuunnokset (Type-transformation)
 
-Tyyppimuunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa.
+Tyyppimuunnoksessa data muutetaan seuraavan funktion tarvitsemaan muotoon muuttamatta alkuperäistä dataa. Imperatiivisessa kielissä tyyppimuunnoksien tekeminen ilman käskyjä on hankalaa. Voidaan ajatella että koko datarakenne on jatkuvassa muutoksen tilassa syötteestä palautteeseen. Käskytystä voidaan välttää ketjuttamalla esitysmuodon muunnoksia.
 
 #### Javalla
 
-Yksi tapa tehdä tyyppimuunnoksia (ja muuttumatonta dataa) on edustaja (proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön. Myös edustajia voidaan ketjuttaa toisiinsa siten että syntyy kutsuketju alkuperäiseen syötteeseen saakka.
+Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (proxy). Sen sijaan että oliolla on omia muuttujia, se toimii näkymänä toisten olioiden tietosisältöön. Myös edustajia voidaan ketjuttaa toisiinsa siten että syntyy kutsuketju alkuperäiseen syötteeseen saakka.
 
 *edustaja*
 
