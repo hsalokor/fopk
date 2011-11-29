@@ -262,7 +262,7 @@ Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
-Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. Siten on mahdollista muodostaa pitkiä kutsuketjuja laskematta yhtäkään tulosta.
+Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. Mikäli apply()-metodia kutsutaan vasta kun arvoa tarvitaa, tulee koodista laiskaa (lazy). Laiskuuden avulla voidaan välttää turhaa laskentaa esimerkiksi virhetapauksissa, jossa laskettua arvoa ei välttämättä tarvita ollenkaan. 
 
 *muuntajaluokka*
 
