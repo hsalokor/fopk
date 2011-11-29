@@ -92,9 +92,7 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 	}
 ````
 
-Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapintoihin vakioita jotka edustavat dataluokan nolla-arvoa. Toinen mahdollisuus on palauttaa esimerkiksi Collections.emptyList(), jonka käsitteleminen ei tuota poikkeuksia.
-
-Tässä esitellyt myöhemmät esimerkit dataluokista käyttävät seuraavaa rajapintaa.
+Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapintoihin vakioita jotka edustavat dataluokan nolla-arvoa. Toinen mahdollisuus on palauttaa esimerkiksi Collections.emptyList(), jonka käsitteleminen ei tuota poikkeuksia. Artikkelissa esitellyt myöhemmät esimerkit dataluokista käyttävät seuraavaa rajapintaa.
 
 *dataluokan rajapinta*
 
@@ -332,7 +330,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 	}
 ```
 
-Muuntajaluokkaa käytetään juuri samaan tapaan kuin muitakin funktioita ja siitäkin voisi tehdä osan koostettua funktiota. Tässä muuntajaluokan testi jossa tarkistetaan mahdolliset virhetilanteet.
+Muuntajaluokkaa käytetään juuri samaan tapaan kuin muitakin funktioita ja siitäkin voisi tehdä osan koostettua funktiota. Seuraavaksi muuntajaluokan testi jossa tarkistetaan mahdolliset virhetilanteet.
 
 *muuntajaluokan testi*
 
