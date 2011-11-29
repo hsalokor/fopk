@@ -238,7 +238,7 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 	}
 ````
 
-Javassa ei ole sisäänrakennettua tapaa saada muuttumattomia tietorakenteita, kuten listoja (List) tai taulukkoja (Map). Tähän tarkoitukseen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
+Mikäli on tarve saada muuttumattomia tietorakenteita kuten listoja (List) tai taulukoita (Map), siihen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
 
 Kuten edellisessä testissä rakentajan metodeja, myös funktioiden kutsuja voidaan ketjuttaa toistensa perään. Tätä kustutaan koostamiseksi.
 
