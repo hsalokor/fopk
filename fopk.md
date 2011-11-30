@@ -13,13 +13,13 @@ Soveltamalla muutamia funktionaalisen ohjelmoinnin käsitteitä voidaan imperati
 
 ## Funktionaaliset ohjelmointitekniikat
 
-Lähes kaikki esitellyt tekniikat tähtäävät ohjelman ylläpitämän tilan vähentämiseen. Mitä vähemmän ylläpidettyä tilaa on, sitä vähemmän on myös odottamattomia sivuvaikutuksia. Täydelliseen tilattomuuteen ei yleensä imperatiivisella ohjelmointikielellä kirjoitetussa ohjelmassa ole mahdollisuutta, eikä sen saavuttamiseksi kannata käyttää liikaa vaivaa.
+Lähes kaikki funktionaaliset ohjelmointitekniikat tähtäävät ohjelman ylläpitämän tilan vähentämiseen. Mitä vähemmän ylläpidettyä tilaa on, sitä vähemmän on myös odottamattomia sivuvaikutuksia. Täydelliseen tilattomuuteen ei yleensä imperatiivisella ohjelmointikielellä kirjoitetussa ohjelmassa ole mahdollisuutta, eikä sen saavuttamiseksi kannata käyttää liikaa vaivaa.
 
-Seuraavissa kappaleissa esittelemme funktionaalisten kielien käsitteitä ja esimerkkejä Javalla. Esimerkit on kirjoitettu siten että ne kuvaavat esiteltyä tekniikkaa, eivätkä ne suoraan pohjaudu tosimaailman tilanteisiin. Ne on pyritty tekemään luettaviksi ja toimivat samalla dokumenttina esitellystä tekniikasta.
+Seuraavissa kappaleissa esittelemme joitakin funktionaalisten kielien käsitteitä ja esimerkkejä Javalla. Esimerkit on kirjoitettu siten että ne kuvaavat esiteltyä tekniikkaa, eivätkä ne suoraan pohjaudu tosimaailman tilanteisiin. Ne on pyritty tekemään luettaviksi ja toimivat samalla dokumenttina esitellystä tekniikasta.
 
 Koska näitä funktionaalisten ohjelmointikielien ominaisuuksia ei ole suoraan rakennettu näihin kieliin, monet tekniikoista saattavat vaikuttaa oudoilta tai jopa tarkoituksettomilta, mutta niiden hyödyntäminen johtaa moniin samoihin etuihin joista funktionaalisen ohjelmointikielten ohjelmoijat nauttivat.
 
-Sivuvaikutuksien syntymistä voi välttää esimerkiksi kirjoittamalla tilattomia funktioita.
+Odottamattomien sivuvaikutuksien syntymistä voi välttää esimerkiksi kirjoittamalla tilattomia funktioita.
 
 ### Tilattomat funktiot (Stateless functions)
 
@@ -94,7 +94,7 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 	}
 ````
 
-Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapintoihin vakioita jotka edustavat dataluokan nolla-arvoa. Toinen mahdollisuus on palauttaa esimerkiksi Collections.emptyList(), jonka käsitteleminen ei tuota poikkeuksia. Artikkelissa esitellyt myöhemmät esimerkit dataluokista käyttävät seuraavaa rajapintaa.
+Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapintoihin vakioita jotka edustavat dataluokan nolla-arvoa. Toinen mahdollisuus on palauttaa esimerkiksi Collections.emptyList, jonka käsitteleminen ei tuota poikkeuksia. Artikkelissa esitellyt myöhemmät esimerkit dataluokista käyttävät seuraavaa rajapintaa.
 
 *dataluokan rajapinta*
 
@@ -133,7 +133,7 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 
 Huomaa, että ContactInformation-rajapinnalla on oma tyhjä vakio NO_CONTACT_INFORMATION, jota voidaan käyttää sen sijaan että palautetaan nolla-arvo. Tällöin nolla-arvon tarkistuksien sijaan voidaan verrata suoraan NO_CONTACT_INFORMATION-vakioon.
 
-Seuraavassa kappaleessa toteutamme rajapinnan siten, että siinä oleva data ei voi muuttua.
+Seuraavassa kappaleessa toteutamme ContactInformation-rajapinnan siten, että siinä oleva data ei voi muuttua.
 
 ### Muuttumaton data (Immutable data)
 
@@ -141,7 +141,9 @@ Yksi helpoimpia tapoja vähentää sivuvaikutuksien syntymistä on estää ohjel
 
 #### Javalla
 
-Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaa suosia final-avainsanaa. Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Usein käytetty tapa on rakentaja-olio (Builder-pattern).
+Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaakin suosia final-avainsanaa, joka estää muuttujien muokkauksen. Tietorakenteiden sisällä olevia muuttujia final-avainsana ei koske. Mikäli on tarve saada muuttumattomia tietorakenteita kuten listoja (List) tai taulukoita (Map), siihen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
+
+Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluokka.
 
 *muuttumaton dataluokka*
 
@@ -176,7 +178,7 @@ Tyypillinen Java-bean-rakenne ohjaa väärään suuntaan ja sen sijaan kannattaa
 	}
 ```
 
-Mikäli muuttumattomien olioiden muodostimen (constructor) parametrejä on paljon, apuna voidaan käyttää rakentaja-olioa. Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään. 
+Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen onnistuu kivuttomasti. Mikäli muuttumattomien olioiden muodostimen (constructor) parametrejä on paljon, apuna voidaan käyttää rakentaja-olioa. Rakentaja-olio pitää rakentamiseen tarvittavat arvot tallessa ja palauttaa rakennettavaan olioon arvoja asetettaessa itsensä. Täten rakentajan metodit voidaan ketjuttaa toistensa perään. 
 
 *rakentaja*
 
@@ -209,7 +211,7 @@ Mikäli muuttumattomien olioiden muodostimen (constructor) parametrejä on paljo
 	}
 ```
 
-Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytettäessa ensin kutsutaan tietoa kartuttavia metodeja ja lopuksi build()-metodia joka palauttaa rakennettavan olion. Mikäli kaikki saatavilla oleva tieto on heti saatavissa, voidaan uusi olio rakentaa yhdellä rivillä. Muissa tapauksessa rakentajaa voidaan antaa tietoa hakeville objekteille.
+Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytettäessa ensin kutsutaan tietoa kartuttavia metodeja ja lopuksi build-metodia joka palauttaa rakennettavan olion. Mikäli kaikki saatavilla oleva tieto on heti saatavissa, voidaan uusi olio rakentaa yhdellä rivillä. Muissa tapauksessa rakentajaa voidaan antaa tietoa hakeville objekteille.
 
 *rakentajan testi*
 
@@ -238,8 +240,6 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 	}
 ````
 
-Mikäli on tarve saada muuttumattomia tietorakenteita kuten listoja (List) tai taulukoita (Map), siihen kannattaa käyttää esimerkiksi [Googlen guava-kirjastoa](http://code.google.com/p/guava-libraries/), josta löytyy mm. ImmutableList- ja ImmutableMap-luokat.
-
 Kuten edellisessä testissä rakentajan metodeja, myös funktioiden kutsuja voidaan ketjuttaa toistensa perään. Tätä kustutaan koostamiseksi.
 
 ### Koostaminen (Composition)
@@ -262,7 +262,7 @@ Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
-Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply()-metodia kutsutaan. Jos apply()-metodia kutsutaan vasta kun arvoa tarvitaan, tulee koodista laiskaa (lazy). Laiskuuden avulla voidaan välttää turhaa laskentaa esimerkiksi virhetapauksissa, jossa laskettua arvoa ei välttämättä tarvita ollenkaan. 
+Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply-metodia kutsutaan. Jos apply-metodia kutsutaan vasta kun arvoa tarvitaan, tulee koodista laiskaa (lazy). Laiskuuden avulla voidaan välttää turhaa laskentaa esimerkiksi virhetapauksissa, jossa laskettua arvoa ei välttämättä tarvita ollenkaan. 
 
 *muuntajaluokka*
 
