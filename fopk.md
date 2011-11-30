@@ -286,11 +286,11 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 		}
 
 		public static String firstWord(String input) {
-			return compose(new First(), new Words()).apply(input);
+			return Functions.compose(new First(), new Words()).apply(input);
 		}
 
 		public static String secondWord(String input) {
-			return compose(new Second(), new Words()).apply(input);
+			return Functions.compose(new Second(), new Words()).apply(input);
 		}
 
 		public static class Lines implements Function<String, List<String>> {

@@ -1,6 +1,5 @@
 package functional.java.examples;
 
-import static com.google.common.base.Functions.compose;
 import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
 import static java.util.Arrays.asList;
 
@@ -8,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.Functions;
 
 public class AddressTransformer implements Function<String, ContactInformation> {
 	@Override
@@ -27,11 +27,11 @@ public class AddressTransformer implements Function<String, ContactInformation> 
 	}
 	
 	public static String firstWord(String input) {
-		return compose(new First(), new Words()).apply(input);
+		return Functions.compose(new First(), new Words()).apply(input);
 	}
 	
 	public static String secondWord(String input) {
-		return compose(new Second(), new Words()).apply(input);
+		return Functions.compose(new Second(), new Words()).apply(input);
 	}
 
 	public static class Lines implements Function<String, List<String>> {
