@@ -24,14 +24,6 @@ public class FilterTest {
 		assertNoBeasts(petsWithoutBeasts);
 	}
 	
-	private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
-		for (String pet : petsWithoutBeasts) {
-			for (String beast : BEASTS) {
-				assertFalse(pet.equals(beast));
-			}
-		}
-	}
-	
 	private static boolean isNoBeast(String input) {
 		for (String beast : BEASTS) {
 			if(input.equals(beast)) {
@@ -39,5 +31,13 @@ public class FilterTest {
 			}
 		}
 		return true;
+	}
+
+	private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
+		for (String pet : petsWithoutBeasts) {
+			for (String beast : BEASTS) {
+				assertFalse(pet.equals(beast));
+			}
+		}
 	}
 }
