@@ -235,6 +235,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 Tässä muutamia koostefunktioita joilla voidaan hakea merkkijonosta ensimmäinen ja toinen sana.
 
 *funktioista koostuva apuluokka*
+
 ```java
 	...
 	public class StringList {
