@@ -32,8 +32,6 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 *suodin*
 
 ```java
-	package functional.java.examples;
-	
 	import java.util.ArrayList;
 	import java.util.List;
 	
@@ -95,8 +93,6 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 *dataluokan rajapinta*
 
 ```java
-	package functional.java.examples;
-	
 	import java.io.Serializable;
 	
 	public interface ContactInformation extends Serializable {
@@ -138,8 +134,6 @@ Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluo
 *muuttumaton dataluokka*
 
 ```java
-	package functional.java.examples;
-
 	public class Address implements ContactInformation {
 		private final String streetAddress;
 		private final String postCode;
@@ -167,8 +161,6 @@ Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen on
 *rakentaja*
 
 ```java
-	package functional.java.examples;
-
 	public class AddressBuilder {
 		private String buildStreetAddress;
 		private String buildPostCode;
@@ -200,8 +192,6 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 *rakentajan testi*
 
 ````java
-	package functional.java.examples;
-
 	import static junit.framework.Assert.assertEquals;
 
 	import org.junit.Test;
@@ -237,8 +227,6 @@ Javassa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja
 Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http://code.google.com/p/guava-libraries/).
 
 ```java
-	package functional.java.examples;
-
 	public interface Function<F, T> {
 		public T apply(F input);
 	}
@@ -320,8 +308,6 @@ Muuntajaluokkaa käytetään juuri samaan tapaan kuin muitakin funktioita ja sii
 *muuntajaluokan testi*
 
 ```java
-	package functional.java.examples;
-
 	import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
 	import static junit.framework.Assert.assertEquals;
 
@@ -369,8 +355,6 @@ Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (
 *edustaja*
 
 ```java
-	package functional.java.examples;
-
 	import static functional.java.examples.AddressTransformer.*;
 
 	public class PostalAddress implements ContactInformation {
@@ -404,8 +388,6 @@ Tyyppimuunnetun luokan käyttäminen on äärimmäisen yksinkertaista, kuten seu
 *tyyppimuunoksen testi*
 
 ```java
-	package functional.java.examples;
-
 	import static junit.framework.Assert.assertEquals;
 
 	import org.junit.Test;
