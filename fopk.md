@@ -272,7 +272,7 @@ Tässä muutamia koostefunktioita joilla voidaan hakea merkkijonosta ensimmäine
 			public static String of(List<String> input) { return new Second().apply(input); }
 		}
 	}
-```
+````
 
 Edellisiä koostefunktioita voidaan käyttää hyödyksi kun halutaan muuttaa merkkijono osoitteeksi. Apuluokassa määritelty kieli näkyy hyvin toAddress-metodissa.
 
