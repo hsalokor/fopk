@@ -99,9 +99,7 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 		public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
 		String streetAddress();
-
 		String postCode();
-
 		String postOffice();
 
 		public static final class NoContactInformation implements ContactInformation {
