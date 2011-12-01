@@ -1,6 +1,6 @@
 package functional.java.examples;
 
-import static functional.java.examples.AddressTransformer.*;
+import static functional.java.examples.StringList.*;
 
 public class PostalAddress implements ContactInformation {
 	private final String address;
