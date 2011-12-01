@@ -1,8 +1,6 @@
 package functional.java.examples;
 
-import java.io.Serializable;
-
-public interface ContactInformation extends Serializable {
+public interface ContactInformation {
 	public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
 	String streetAddress();
