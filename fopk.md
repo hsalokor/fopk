@@ -71,19 +71,19 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 			assertNoBeasts(petsWithoutBeasts);
 		}
 
+		private static boolean isNoBeast(String input) {
+			for (String beast : BEASTS) {
+				if(input.equals(beast)) { return false; }
+			}
+			return true;
+		}
+
 		private void assertNoBeasts(Iterable<String> petsWithoutBeasts) {
 			for (String pet : petsWithoutBeasts) {
 				for (String beast : BEASTS) {
 					assertFalse(pet.equals(beast));
 				}
 			}
-		}
-
-		private static boolean isNoBeast(String input) {
-			for (String beast : BEASTS) {
-				if(input.equals(beast)) { return false; }
-			}
-			return true;
 		}
 	}
 ````
@@ -93,9 +93,7 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 *dataluokan rajapinta*
 
 ```java
-	import java.io.Serializable;
-	
-	public interface ContactInformation extends Serializable {
+	public interface ContactInformation {
 		public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
 		String streetAddress();
@@ -234,10 +232,60 @@ Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten
 
 Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen apply-metodia kutsutaan. Jos apply-metodia kutsutaan vasta kun arvoa tarvitaan, tulee koodista laiskaa (lazy). Laiskuuden avulla voidaan välttää turhaa laskentaa esimerkiksi virhetapauksissa, jossa laskettua arvoa ei välttämättä tarvita ollenkaan. 
 
+Tässä muutamia koostefunktioita joilla voidaan hakea merkkijonosta ensimmäinen ja toinen sana.
+
+*funktioista koostuva apuluokka*
+```java
+	...
+	public class StringList {
+		public static String firstWord(String input) {
+			return Functions.compose(new First(), new Words()).apply(input);
+		}
+	
+		public static String secondWord(String input) {
+			return Functions.compose(new Second(), new Words()).apply(input);
+		}
+	
+		public static class Lines implements Function<String, List<String>> {
+			@Override
+			public List<String> apply(String input) { return asList(input.split("\n")); }
+		
+			public static List<String> from(String input) { return new Lines().apply(input); }
+		}
+
+		public static class Words implements Function<String, List<String>> {
+			@Override
+			public List<String> apply(String input) { return Arrays.asList(input.split(" ")); }
+		}
+
+		public static class First implements Function<List<String>, String> {
+			@Override
+			public String apply(List<String> input) { return input.get(0); }
+		
+			public static String of(List<String> input) { return new First().apply(input); }
+		}
+	
+		public static class Second implements Function<List<String>, String> {
+			@Override
+			public String apply(List<String> input) { return input.get(1); }
+		
+			public static String of(List<String> input) { return new Second().apply(input); }
+		}
+	}
+```
+
+Edellisiä koostefunktioita voidaan käyttää hyödyksi kun halutaan muuttaa merkkijono osoitteeksi. Apuluokassa määritelty kieli näkyy hyvin toAddress-metodissa.
+
 *muuntajaluokka*
 
 ```java
-	...
+	package functional.java.examples;
+
+	import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
+	import static functional.java.examples.StringList.*;
+	import java.util.List;
+	import com.google.common.base.Function;
+
 	public class AddressTransformer implements Function<String, ContactInformation> {
 		@Override
 		public ContactInformation apply(String input) {
@@ -253,50 +301,6 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 			addressBuilder.withPostCode(firstWord(Second.of(addressLines)));
 			addressBuilder.withPostOffice(secondWord(Second.of(addressLines)));
 			return addressBuilder.build();
-		}
-
-		public static String firstWord(String input) {
-			return Functions.compose(new First(), new Words()).apply(input);
-		}
-
-		public static String secondWord(String input) {
-			return Functions.compose(new Second(), new Words()).apply(input);
-		}
-
-		public static class Lines implements Function<String, List<String>> {
-			@Override
-			public List<String> apply(String input) {
-				return asList(input.split("\n"));
-			}
-
-			public static List<String> from(String input) {
-				return new Lines().apply(input);
-			}
-		}
-
-		public static class Words implements Function<String, List<String>> {
-			@Override
-			public List<String> apply(String input) {
-				return Arrays.asList(input.split(" "));
-			}
-		}
-
-		public static class First implements Function<List<String>, String> {
-			@Override
-			public String apply(List<String> input) { return input.get(0); }
-
-			public static String of(List<String> input) {
-				return new First().apply(input);
-			}
-		}
-
-		public static class Second implements Function<List<String>, String> {
-			@Override
-			public String apply(List<String> input) { return input.get(1); }
-
-			public static String of(List<String> input) {
-				return new Second().apply(input);
-			}
 		}
 	}
 ```
@@ -353,7 +357,7 @@ Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (
 *edustaja*
 
 ```java
-	import static functional.java.examples.AddressTransformer.*;
+	import static functional.java.examples.StringList.*;
 
 	public class PostalAddress implements ContactInformation {
 		private final String address;
@@ -371,7 +375,7 @@ Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (
 	}
 ```
 
-Edustaja käyttää hyödykseen aiemmin esitellyn muuntajaluokan funktioita. Lopputulos on sama kuin aiemmin, mutta nyt alkuperäinen syöte säilyy aina muuttumattomana.
+Edustaja käyttää hyödykseen aiemmin esitellyn apuluokan funktioita. Lopputulos on sama kuin aiemmin, mutta nyt alkuperäinen syöte säilyy aina muuttumattomana.
 
 Tyyppimuunnetun luokan käyttäminen on äärimmäisen yksinkertaista, kuten seuraava testi osoittaa.
 

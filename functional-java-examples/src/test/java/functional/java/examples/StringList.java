@@ -56,5 +56,4 @@ public class StringList {
 			return new Second().apply(input);
 		}
 	}
-
 }
