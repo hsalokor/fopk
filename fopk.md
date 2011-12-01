@@ -440,7 +440,7 @@ Tyyppimuunnetun luokan käyttäminen on äärimmäisen yksinkertaista, kuten seu
 		}
 
 		@Test
-		public void firtsWordOfSecondLineIsPostCode() {
+		public void firstWordOfSecondLineIsPostCode() {
 			assertEquals("00999", postalAddress.postCode());
 		}
 	

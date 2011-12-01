@@ -14,7 +14,7 @@ public class PostalAddressTest {
 	}
 
 	@Test
-	public void firtsWordOfSecondLineIsPostCode() {
+	public void firstWordOfSecondLineIsPostCode() {
 		assertEquals("00999", postalAddress.postCode());
 	}
 	
