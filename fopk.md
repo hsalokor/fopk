@@ -33,10 +33,10 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 
 ```java
 	package functional.java.examples;
-
+	
 	import java.util.ArrayList;
 	import java.util.List;
-
+	
 	public class Filter {
 		public List<String> apply(List<String> values, Condition<String> predicate) {
 			ArrayList<String> output = new ArrayList<String>();
@@ -47,10 +47,8 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 			}
 			return output;
 		}
-
-		public interface Condition<T> {
-			public boolean apply(T input);
-		}
+	
+		public interface Condition<T> { public boolean apply(T input); }
 	}
 ```
 
@@ -85,9 +83,7 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 
 		private static boolean isNoBeast(String input) {
 			for (String beast : BEASTS) {
-				if(input.equals(beast)) {
-					return false;
-				}
+				if(input.equals(beast)) { return false; }
 			}
 			return true;
 		}
@@ -100,9 +96,9 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 
 ```java
 	package functional.java.examples;
-
+	
 	import java.io.Serializable;
-
+	
 	public interface ContactInformation extends Serializable {
 		public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
@@ -114,19 +110,13 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 
 		public static final class NoContactInformation implements ContactInformation {
 			@Override
-			public String streetAddress() {
-				return "";
-			}
+			public String streetAddress() { return ""; }
 
 			@Override
-			public String postCode() {
-				return "";
-			}
+			public String postCode() { return ""; }
 
 			@Override
-			public String postOffice() {
-				return "";
-			}
+			public String postOffice() { return ""; }
 		}
 	}
 ```
@@ -154,7 +144,7 @@ Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluo
 		private final String streetAddress;
 		private final String postCode;
 		private final String postOffice;
-
+		
 		public Address(String streetAddress, String postCode, String postOffice) {
 			this.streetAddress = streetAddress;
 			this.postCode = postCode;
@@ -162,19 +152,13 @@ Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluo
 		}
 
 		@Override
-		public String streetAddress() {
-			return streetAddress;
-		}
+		public String streetAddress() { return streetAddress; }
 
 		@Override
-		public String postCode() {
-			return postCode;
-		}
+		public String postCode() { return postCode; }
 
 		@Override
-		public String postOffice() {
-			return postOffice;
-		}
+		public String postOffice() { return postOffice; }
 	}
 ```
 
@@ -313,9 +297,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 
 		public static class First implements Function<List<String>, String> {
 			@Override
-			public String apply(List<String> input) {
-				return input.get(0);
-			}
+			public String apply(List<String> input) { return input.get(0); }
 
 			public static String of(List<String> input) {
 				return new First().apply(input);
@@ -324,9 +306,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 
 		public static class Second implements Function<List<String>, String> {
 			@Override
-			public String apply(List<String> input) {
-				return input.get(1);
-			}
+			public String apply(List<String> input) { return input.get(1); }
 
 			public static String of(List<String> input) {
 				return new Second().apply(input);
