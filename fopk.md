@@ -32,11 +32,9 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 *suodin*
 
 ```java
-	package functional.java.examples;
-
 	import java.util.ArrayList;
 	import java.util.List;
-
+	
 	public class Filter {
 		public List<String> apply(List<String> values, Condition<String> predicate) {
 			ArrayList<String> output = new ArrayList<String>();
@@ -47,10 +45,8 @@ Edelläolevassa esimerkissä on suodin jossa syötettä ei suoraan muokata, vaan
 			}
 			return output;
 		}
-
-		public interface Condition<T> {
-			public boolean apply(T input);
-		}
+	
+		public interface Condition<T> { public boolean apply(T input); }
 	}
 ```
 
@@ -85,9 +81,7 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 
 		private static boolean isNoBeast(String input) {
 			for (String beast : BEASTS) {
-				if(input.equals(beast)) {
-					return false;
-				}
+				if(input.equals(beast)) { return false; }
 			}
 			return true;
 		}
@@ -99,34 +93,24 @@ Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapi
 *dataluokan rajapinta*
 
 ```java
-	package functional.java.examples;
-
 	import java.io.Serializable;
-
+	
 	public interface ContactInformation extends Serializable {
 		public static final ContactInformation NO_CONTACT_INFORMATION = new NoContactInformation();
 
 		String streetAddress();
-
 		String postCode();
-
 		String postOffice();
 
 		public static final class NoContactInformation implements ContactInformation {
 			@Override
-			public String streetAddress() {
-				return "";
-			}
+			public String streetAddress() { return ""; }
 
 			@Override
-			public String postCode() {
-				return "";
-			}
+			public String postCode() { return ""; }
 
 			@Override
-			public String postOffice() {
-				return "";
-			}
+			public String postOffice() { return ""; }
 		}
 	}
 ```
@@ -148,13 +132,11 @@ Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluo
 *muuttumaton dataluokka*
 
 ```java
-	package functional.java.examples;
-
 	public class Address implements ContactInformation {
 		private final String streetAddress;
 		private final String postCode;
 		private final String postOffice;
-
+		
 		public Address(String streetAddress, String postCode, String postOffice) {
 			this.streetAddress = streetAddress;
 			this.postCode = postCode;
@@ -162,19 +144,13 @@ Tässä esimerkkinä edellisen kappaleen rajapinnan mukainen muuttumaton dataluo
 		}
 
 		@Override
-		public String streetAddress() {
-			return streetAddress;
-		}
+		public String streetAddress() { return streetAddress; }
 
 		@Override
-		public String postCode() {
-			return postCode;
-		}
+		public String postCode() { return postCode; }
 
 		@Override
-		public String postOffice() {
-			return postOffice;
-		}
+		public String postOffice() { return postOffice; }
 	}
 ```
 
@@ -183,8 +159,6 @@ Muuttumattomat oliot vaativat avukseen apuluokkia, jotta niiden muodostaminen on
 *rakentaja*
 
 ```java
-	package functional.java.examples;
-
 	public class AddressBuilder {
 		private String buildStreetAddress;
 		private String buildPostCode;
@@ -216,8 +190,6 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 *rakentajan testi*
 
 ````java
-	package functional.java.examples;
-
 	import static junit.framework.Assert.assertEquals;
 
 	import org.junit.Test;
@@ -253,8 +225,6 @@ Javassa koostaminen tehdään funktio-olioilla, jotka alustetaan syötteellä ja
 Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http://code.google.com/p/guava-libraries/).
 
 ```java
-	package functional.java.examples;
-
 	public interface Function<F, T> {
 		public T apply(F input);
 	}
@@ -313,9 +283,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 
 		public static class First implements Function<List<String>, String> {
 			@Override
-			public String apply(List<String> input) {
-				return input.get(0);
-			}
+			public String apply(List<String> input) { return input.get(0); }
 
 			public static String of(List<String> input) {
 				return new First().apply(input);
@@ -324,9 +292,7 @@ Functions.compose-metodilla muodostettu koostefuktio arvioidaan vasta kun sen ap
 
 		public static class Second implements Function<List<String>, String> {
 			@Override
-			public String apply(List<String> input) {
-				return input.get(1);
-			}
+			public String apply(List<String> input) { return input.get(1); }
 
 			public static String of(List<String> input) {
 				return new Second().apply(input);
@@ -340,8 +306,6 @@ Muuntajaluokkaa käytetään juuri samaan tapaan kuin muitakin funktioita ja sii
 *muuntajaluokan testi*
 
 ```java
-	package functional.java.examples;
-
 	import static functional.java.examples.ContactInformation.NO_CONTACT_INFORMATION;
 	import static junit.framework.Assert.assertEquals;
 
@@ -389,31 +353,21 @@ Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (
 *edustaja*
 
 ```java
-	package functional.java.examples;
-
 	import static functional.java.examples.AddressTransformer.*;
 
 	public class PostalAddress implements ContactInformation {
 		private final String address;
 
-		public PostalAddress(String address) {
-			this.address = address;
-		}
+		public PostalAddress(String address) { this.address = address; }
 
 		@Override
-		public String streetAddress() {
-			return First.of(Lines.from(address));
-		}
+		public String streetAddress() { return First.of(Lines.from(address)); }
 
 		@Override
-		public String postCode() {
-			return firstWord(Second.of(Lines.from(address)));
-		}
+		public String postCode() { return firstWord(Second.of(Lines.from(address))); }
 
 		@Override
-		public String postOffice() {
-			return secondWord(Second.of(Lines.from(address)));
-		}
+		public String postOffice() { return secondWord(Second.of(Lines.from(address))); }
 	}
 ```
 
@@ -424,8 +378,6 @@ Tyyppimuunnetun luokan käyttäminen on äärimmäisen yksinkertaista, kuten seu
 *tyyppimuunoksen testi*
 
 ```java
-	package functional.java.examples;
-
 	import static junit.framework.Assert.assertEquals;
 
 	import org.junit.Test;
