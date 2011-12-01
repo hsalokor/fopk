@@ -358,24 +358,16 @@ Yksi tapa tehdä tyyppimuunnoksia (ja samalla muuttumatonta dataa) on edustaja (
 	public class PostalAddress implements ContactInformation {
 		private final String address;
 
-		public PostalAddress(String address) {
-			this.address = address;
-		}
+		public PostalAddress(String address) { this.address = address; }
 
 		@Override
-		public String streetAddress() {
-			return First.of(Lines.from(address));
-		}
+		public String streetAddress() { return First.of(Lines.from(address)); }
 
 		@Override
-		public String postCode() {
-			return firstWord(Second.of(Lines.from(address)));
-		}
+		public String postCode() { return firstWord(Second.of(Lines.from(address))); }
 
 		@Override
-		public String postOffice() {
-			return secondWord(Second.of(Lines.from(address)));
-		}
+		public String postOffice() { return secondWord(Second.of(Lines.from(address))); }
 	}
 ```
 
