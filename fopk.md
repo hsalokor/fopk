@@ -86,7 +86,7 @@ Esimerkki suotimen käytöstä kirjoitettuna testin muotoon. Aiemmin esitelty Co
 			}
 		}
 	}
-````
+```
 
 Nolla-arvojen palauttamista voidaan välttää rakentamalla data-luokkien rajapintoihin vakioita jotka edustavat dataluokan nolla-arvoa. Toinen mahdollisuus on palauttaa esimerkiksi Collections.emptyList, jonka käsitteleminen ei tuota poikkeuksia. Artikkelissa esitellyt myöhemmät esimerkit dataluokista käyttävät seuraavaa rajapintaa.
 
@@ -187,7 +187,7 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 
 *rakentajan testi*
 
-````java
+```java
 	import static junit.framework.Assert.assertEquals;
 
 	import org.junit.Test;
@@ -208,7 +208,7 @@ Seuraavaksi esimerkki rakentajan käytöstä testin muodossa. Rakentajaa käytet
 			assertEquals("OLEMATON", address.postOffice());
 		}
 	}
-````
+```
 
 Kuten edellisessä testissä rakentajan metodeja, myös funktioiden kutsuja voidaan ketjuttaa toistensa perään. Tätä kustutaan koostamiseksi.
 
@@ -226,7 +226,7 @@ Funktion rajapinta on  yksinkertainen ja se löytyy mm. [guava-kirjastosta](http
 	public interface Function<F, T> {
 		public T apply(F input);
 	}
-````
+```
 
 Alla olevassa esimerkissä on käytetty funktioita ja staattisia metodeita siten että niistä muodostuu oma kielensä. Funktioiden käyttö on siirretty staattisten metodien taakse, jotta vältyttäisiin "new"-sanan toistamiselta. Guava-kirjastossa on monia apuluokkia funktioiden käyttämiseen, kuten [Functions-luokka](http://google-collections.googlecode.com/svn/trunk/javadoc/index.html?com/google/common/base/Functions.html) jota alla oleva esimerkki käyttää.
 
@@ -273,7 +273,7 @@ Tässä muutamia koostefunktioita joilla voidaan hakea merkkijonosta ensimmäine
 			public static String of(List<String> input) { return new Second().apply(input); }
 		}
 	}
-````
+```
 
 Edellisiä koostefunktioita voidaan käyttää hyödyksi kun halutaan muuttaa merkkijono osoitteeksi. Apuluokassa määritelty kieli näkyy hyvin toAddress-metodissa.
 
@@ -413,6 +413,8 @@ Tyyppimuunnetun luokan käyttäminen on äärimmäisen yksinkertaista, kuten seu
 Monet funktionaaliset tekniikat käytettynä imperatiivisissä kielissä tuottavat lisää laskentaa paikkoihin jossa perinteisesti on ylläpidetty tilaa. Tästä ei kannata kuitenkaan huolestua, sillä mikäli suorituskykyongelmia löytyy ne voidaan ratkaista esimerkiksi oikein sijoitetun välimuistin avulla tai säikeistämällä. Mitä muuta välimuisti onkaan kuin funktio joka muistaa syötteellä saadun arvon!
 
 Funktionaalisten ohjelmointitekniikoiden käyttö vaatii ohjelmoijalta kurinalaisuutta. Erityisesti ulkoisia kirjastoja käytettäessä voi olla hankalaa ohjelmoida funktionaalisella tavalla. Halu lipsua muuttumattoman datan käytöstä tai tyyppimuunnoksien tekemisestä saattaa kasvaa aikataulupaineiden kerääntyessä. Funktionaalisella tiellä pysyminen kuitenkin kannattaa, sillä funktionaalisesti kirjoitettu koodi on helposti luettavampaa ja muokattavampaa kuin imperatiiviseen tapaan kirjoitettu. Tämän lisäksi se on helpompaa testata myös suurempina yksikköinä kuin luokkatasolla.
+
+Artikkelissa esitetyt koodiesimerkit löytyvät [githubista](https://github.com/hsalokor/funktionaalisempi-ohjelmointi).
 
 Me allekirjoittaneet toivomme kaikille lukijoille mukavia funktionaalisia koodaushetkiä!
 
